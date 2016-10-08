@@ -1,6 +1,5 @@
 ---
 layout: default
-comments: true
 ---
 
 <div class="home">
@@ -20,22 +19,5 @@ comments: true
   </ul>
 
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
-
-  {% if page.comments %}
-    <div id="disqus_thread"></div>
-    <script>
-    var disqus_config = function () {
-      this.page.url = 'https://myuki-chan.github.io';
-      this.page.identifier = '123';
-    };
-    (function() {
-      var d = document, s = d.createElement('script');
-      s.src = '//miyuki.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-    })();
-    </script>
-    <noscript>Please enable JavaScript to view the comments</noscript>
-  {% endif %}
 
 </div>
