@@ -17,6 +17,7 @@ But nevertheless let's try to get some intuition about how `std::launder` works.
 The original proposal provides an example:
 
 {% highlight C++ %}
+{% raw %}
 struct X { const int n; };
 union U { X x; float f; };
 void tong() {
@@ -29,6 +30,7 @@ void tong() {
   // undefined behavior, 'u.x' does not name new subobject
   assert(u.x.n == 2);
 }
+{% endraw %}
 {% endhighlight %}
 
 Here we first initialize `u` with `{{ 1 }}` (so `x.n` is set to 1, and `x`
@@ -52,18 +54,21 @@ Finally, let's look at another example. The GCC maintainers initially
 `std::launder` as a no-op, i.e. something similar to:
 
 {% highlight C++ %}
+{% raw %}
  template<typename _Tp>
    constexpr _Tp*
    launder(_Tp* __p) noexcept
    {
      return __p;
    }
+{% endraw %}
 {% endhighlight %}
 
 but Richard Smith (the lead developer of Clang) came up with an example
 which is compiled correctly by Clang, but miscompiled by GCC:
 
 {% highlight C++ %}
+{% raw %}
 void *operator new(size_t, void *p) { return p; }
 
 struct A {
@@ -82,14 +87,17 @@ int h() {
   int m = std::launder(&a)->f();
   return n + m;
 }
+{% endraw %}
 {% endhighlight %}
 
 The optimizer folds `h` into something similar to:
 
 {% highlight C++ %}
+{% raw %}
 int h() {
   return 4;
 }
+{% endraw %}
 {% endhighlight %}
 
 (when compiled correctly, this function should return 3).
