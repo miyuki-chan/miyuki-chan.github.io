@@ -5,7 +5,7 @@ title: 'std::launder: the most obscure new feature of C++17'
 ---
 Proposal [P0137R1](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0137r1.html)
 introduces a new function into the C++ standard library called `std::launder`.
-Unfortunately, this proposal it hard to understand for mere mortals.
+Unfortunately, this proposal is hard to understand for mere mortals.
 
 This is what Botond Ballo writes about `std::launder` in his [trip report](https://botondballo.wordpress.com/2016/07/06/trip-report-c-standards-meeting-in-oulu-june-2016/)
 to the C++ Standards Commitee meeting:
