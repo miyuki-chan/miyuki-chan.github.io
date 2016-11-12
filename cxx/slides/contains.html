@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>P0458R0 Checking for Existence of an Element in Associative
+	Containers</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/github-gist.css">
+
+	<style type="text/css">
+		.reveal .slides {
+      text-align: left;
+  	}
+		.reveal .slides h1 {
+      text-align: center;
+			font-size: 72px;
+  	}
+		.reveal tt {
+			font-family: monospace;
+		}
+	</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+	<section>
+		<h1>P0458R0 Checking for Existence of an Element in Associative
+		Containers</h1>
+	</section>
+	<section>
+		<p>The paper proposes to add a member function <tt>contains</tt>, that
+		checks, whether or not a given element exists in a container, to standard
+		associative containers</p>
+	</section>
+	<section>
+		The most common current idiom requires some boilerplate:
+		<pre><code class="cpp" data-trim style="font-size: 24px;">
+if (some_set.find(element) != some_set.end()) {
+// ...
+}
+		</code></pre>
+		An alternative is using the <tt>count</tt> method. Downsides:
+		<p><ul>
+			<li>Does not express the intent as clearly as <tt>contains</tt>
+				would. E.g., compare:<br>
+				<tt>if (str.size())</tt>&nbsp;&nbsp;&nbsp;vs&nbsp;&nbsp;&nbsp;
+				<tt>if (!str.empty())</tt></li>
+			<li>O(count(key)) for multiset/multimap</li>
+		</ul></p>
+	</section>
+	<section>
+		<p>Qt associative containers implement <tt>contains</tt>. It is a more common
+		operation than <tt>find</tt>. Estimate done by Thiago Macieira (for Qt
+		codebase):</p>
+		<p><ul>
+			<li><tt>find</tt>: 553 occurrences</li>
+			<li><tt>contains</tt>: 2977 occurrences</li>
+		</ul></p>
+	</section>
+	<section>
+		<h2>Design decisions</h2>
+		<p>Straw poll: member function vs free function.</p>
+		<p>Considerations for the "free function" option:</p>
+		<p><ul>
+			<li>Do we want it to work only for assciative containers or for
+				arbitrary ranges as well</li>
+			<li>What about a pair of iterators</li>
+		</ul></p>
+	</section>
+</div></div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>

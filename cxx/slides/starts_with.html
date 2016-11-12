@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>P0457R0 String Prefix and Suffix Checking</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<style type="text/css">
+		.reveal .slides {
+      text-align: left;
+  	}
+		.reveal .slides h1 {
+      text-align: center;
+  	}
+		.reveal tt {
+			font-family: monospace;
+		}
+	</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+	<section>
+		<h1>P0457R0 String Prefix and Suffix Checking</h1>
+	</section>
+	<section>
+		<p>Checking, whether or not a given string starts with a given prefix (or
+		ends with a given suffix) is a common task.</p>
+		<p>This proposal adds two member functions</p>
+		<p><ul>
+			<li><tt>starts_with</tt></li>
+			<li><tt>ends_with</tt></li>
+		</ul></p>
+		<p>to class templates</p>
+		<p><ul>
+			<li><tt>std::basic_string</tt></li>
+			<li><tt>std::basic_string_view</tt></li>
+		</ul></p>
+	</section>
+	<section>
+		<p>Implemented in standard libraries of many other programming languages as
+		a member of string/string-like classes. For example:</p>
+		<p><ul>
+			<li>Python</li>
+			<li>Java, Scala</li>
+			<li>.NET langauges</li>
+			<li>Rust</li>
+			<li>Swift</li>
+		</ul></p>
+	</section>
+	<section>
+		<p>Implemented in some C++ libraries:</p>
+		<p><ul>
+			<li>Qt (<tt>QString</tt>, <tt>QStringRef</tt>)</li>
+			<li>boost<br>
+				<ul>
+					<li>original <tt>string_ref</tt> (<tt>string_view</tt>)</li>
+					<li><tt>boost::algorithm::starts_with</tt> free function</li>
+				</ul>
+			</li>
+		</ul></p>
+	</section>
+	<section>
+		<p>Used in various codebases</p>
+		<table>
+			<tr>
+				<th>Name</th>
+				<th><tt>starts_with</tt></th>
+				<th><tt>ends_with</tt></th>
+			</tr>
+			<tr>
+				<td>Qt</td>
+				<td>1193</td>
+				<td>953</td>
+			</tr>
+				<td>Webkit</td>
+				<td>304</td>
+				<td>142</td>
+			</tr>
+			<tr>
+				<td>LLVM</td>
+				<td>113</td>
+				<td>38</td>
+			</tr>
+		</table>
+	</section>
+	<section>
+		<h2>Discussion in Bristol</h2>
+		<div style="font-size: 32px;">
+			<p>Alan was concerned about "findXXX" and <tt>starts_with/end_with</tt>
+			functions, and suggested that they be free functions.</p>
+			<p>Sam said that he was in favor of having <tt>starts_with/end_with</tt>
+			as member functions.</p>
+			<p>Dietmar suggested that <tt>starts_with/end_with</tt> should be in a
+			separate proposal, and are independent of <tt>string_view</tt>. He also
+			said that we are not designing a new interface here, we need to be more or
+			less compatible with <tt>std::string</tt>.</p>
+		</div>
+	</section>
+	<section>
+		<h2>Design decisions</h2>
+		<p><ul>
+			<li>Member function vs. free function</li>
+			<li>Overload set
+				<ul>
+					<li><tt>string_view</tt></li>
+					<li><tt>charT</tt></li>
+				</ul>
+			</li>
+		</ul></p>
+	</section>
+</div></div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+	// More info https://github.com/hakimel/reveal.js#configuration
+	Reveal.initialize({
+		history: true,
+
+		// More info https://github.com/hakimel/reveal.js#dependencies
+		dependencies: [
+			{ src: 'plugin/markdown/marked.js' },
+			{ src: 'plugin/markdown/markdown.js' },
+			{ src: 'plugin/highlight/highlight.js',
+				async: true,
+				callback: function() { hljs.initHighlightingOnLoad(); } }
+		]
+	});
+</script>
+</body>
+</html>
