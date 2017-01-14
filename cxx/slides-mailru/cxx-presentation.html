@@ -1,0 +1,1439 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>C++ завтра и послезавтра</title>
+
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/theme/white.css">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="lib/css/github-gist.css">
+
+  <style type="text/css">
+    .reveal .slides { text-align: left; }
+    .reveal .slides img {
+      border: none;
+      box-shadow: none;
+    }
+    .reveal pre { width: 100%; }
+    .reveal pre code {
+      /* line-height: normal;
+      font-size: 30px; */
+      max-height: 600px;
+    }
+    .reveal tt {
+      font-family: monospace;
+      font-weight: bold;
+    }
+    .reveal .slides h2, .reveal .slides h3 {
+      text-transform: none;
+    }
+    .reveal blockquote {
+      width: 90%;
+    }
+    /* Proposals */
+    .proposal { width: 100% }
+    .proposal td.current { background-color: #89f493; }
+    .proposal td.next { background-color: #f4f489; }
+    .proposal td.no { background-color: #f48c89; }
+    a.paper:before {
+      font-family: FontAwesome;
+      padding-right: 10px;
+      content: "\f0f6";
+    }
+
+    /* List with tick marks */
+    ul.fa-ul {
+      list-style-type: none;
+    }
+    ul.fa-ul li i.fa-check-square {
+      color: green;
+    }
+
+    /* For "todo" */
+    .reveal .slides span.todo:before { content: "TODO "; }
+    .reveal .slides span.todo {
+      font-size: 36px;
+      font-weight: bold;
+      color: red;
+    }
+
+    .reveal,
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+      text-transform: none;
+      font-family: "Arial", Helvetica, sans-serif;
+    }
+
+    /* For title slide */
+    .reveal .slides h1 {
+      text-align: center;
+      font-size: 72px;
+    }
+    .reveal .slides div.center-wrapper { text-align: center; }
+    .reveal .slides img.logo { display: inline-block; }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+  <!-- Титульный слайд -->
+  <section>
+    <h1>C++ завтра и послезавтра</h1>
+    <div class="center-wrapper"><b>Михаил Мальцев</b></div>
+    <div class="center-wrapper">
+      <img src="my_mail_ru.png" class="logo">
+    </div>
+    <aside class="notes">
+      <p>Представиться.</p>
+      <p>&quot;Завтра и послезавтра&quot; означает ближайшую версию (C++17) и дальнейшее
+        развитие.</p>
+      <p>Провести опрос: кто из присутствующих использует C++ в продакшене?</p>
+      <p>В докладе много ссылок, HTML-версию слайдов я отправлю через рассылку</p>
+    </aside>
+  </section>
+
+  <!-- О чём я буду рассказывать -->
+  <section>
+    <h2>О чём я буду рассказывать</h2>
+    <p><ol>
+      <li>Работа комитета и стандарт C++17</li>
+      <li>Технические спецификации</li>
+      <li>Дальнейшее развитие, С++2a</li>
+      <li>Россия в комитете C++</li>
+    </ol></p>
+  </section>
+
+  <!-- C++17 CORE  -->
+
+  <!-- Комитет WG21 -->
+  <section>
+    <h2>Комитет WG21</h2>
+    <img src="full_wg21.jpg" style="width: 100%;">
+    <aside class="notes">
+      <p>Язык C++ разрабатывается комитетом, в котором участвует ~100 человек.</p>
+    </aside>
+  </section>
+
+  <!-- Встречи комитета -->
+  <section>
+    <h3>Встречи комитета</h3>
+    <p><ul>
+      <li>isocpp.org: <a href="https://isocpp.org/std/meetings-and-participation">
+        Meetings and Participation</a></li>
+      <li>open-std.org: <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/">
+        Списки</a> предложений в стандарт C++</li>
+      <li><a href="https://botondballo.wordpress.com/2016/11/25/trip-report-c-standards-meeting-in-issaquah-november-2016/">
+        Блог</a> Botond Ballo &mdash; подробные отчёты со встреч комитета</li>
+      <li>Блог компании Yandex на habrahabr:<ul>
+        <li><a href="https://habrahabr.ru/company/yandex/blog/304510/">
+          Последние новости о развитии C++</a> &mdash; встреча в Оулу (07.16)</li>
+        <li><a href="https://habrahabr.ru/company/yandex/blog/315606/">
+          С++17 и С++2a: новости со встречи ISO в Иссакуа</a> &mdash; встреча в Иссакуа (11.16)</li>
+      </ul></li>
+    </ul></p>
+    <aside class="notes">
+      <p>Встречи комитета обычно проходят 3 раза в год</p>
+      <p>На каждой встрече рассматриваются предложения (proposal). Обязательное условие рассмотрения
+        &mdash; личное присутствие на встрече. Полный список предложений обширен (около 500 за 2016
+        год). Читать proposal-ы полезно, если вы хотите узнать обоснование тех или иных решений.</p>
+    </aside>
+  </section>
+
+  <!-- Обзор C++17 -->
+  <section>
+    <h3>Обзор C++17</h3>
+    <p>Нереалистичные ожидания:</p>
+    <p><ul>
+      <li>Bjarne Stroustrup <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4492.pdf">
+      Thoughts about C++17</a></li>
+    </ul></p>
+    <p>Что попало в стандарт (доклад Alisdair Meredith на CppCon 2016):</p>
+    <p><ul class="fa-ul">
+      <li><a href="https://www.youtube.com/watch?v=22jIHfvelZk">
+        <i class="fa fa-li fa-youtube-play"></i>C++17 in Breadth (part 1 of 2)</a></li>
+      <li><a href="https://www.youtube.com/watch?v=-rIixnNJM4k">
+        <i class="fa fa-li fa-youtube-play"></i>C++17 in Breadth (part 2 of 2)</a></li>
+    </ul></p>
+    <aside class="notes">
+      <p>Планировалось разделить выпускаемые релизы на major (как C++11) и minor (как C++14), но
+        от этой идеи отказались.</p>
+      <p>Презентации Страуструпа (и отчасти Саттера), к сожалению, вызвали у пользователей
+        очень нереалистичные ожидания от следующего стандарта. К примеру, Бьярне ожидал, что
+        в C++17 попадут концепты, модули, сопрограммы и интервалы.</p>
+      <p>На самом деле в C++17 попало довольно много фич. Большинство &mdash; в стандартную
+        библиотеку.</p>
+      <p>Двухчасовой доклад Alisdair-а &mdash; краткий обзор всех новых возможностей стандарта.
+        Поскольку я хочу поговорить не только о C++17, но и будущих версиях, мы рассмотрим лишь
+        некоторые из возможностей.</p>
+    </aside>
+  </section>
+
+  <!-- Список изменений, вошедших в стандарт -->
+  <section>
+    <p>Список изменений, вошедших в стандарт:</p>
+    <p><ul>
+      <li><a href="https://gcc.gnu.org/projects/cxx-status.html#cxx1z">GCC</a></li>
+      <li><a href="http://clang.llvm.org/cxx_status.html#cxx17">Clang</a></li>
+    </ul></p>
+    <p>В том числе в стандартную библиотеку:</p>
+    <p><ul>
+      <li><a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/status.html#status.iso.201z">
+        libstd++</a> (GCC, Linux)</li>
+      <li><a href="http://libcxx.llvm.org/cxx1z_status.html">libc++</a> (Clang, Mac)</li>
+    </ul></p>
+    <aside class="notes">
+      <p>Полный список изменений проще всего позаимствовать у разработчиков компиляторов.</p>
+      <p>Я сосредоточусь на GCC и Clang.</p>
+    </aside>
+  </section>
+
+  <!-- Изменения в языке (кол-во) -->
+  <section>
+    <h2>Изменения в языке</h2>
+    <p>38 предложений (36 фич)</p>
+    <aside class="notes">
+      <p>Стандарт C++ описывает сам язык (core language) и стандартную библиотеку.</p>
+    </aside>
+  </section>
+
+  <!-- Structured bindings -->
+  <section>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>GCC</th><th>Clang</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0217r3.html"
+          class="paper">P0217R3</a></td>
+        <td>Structured bindings</td>
+        <td class="next">7</td>
+        <td class="current">3.9</td>
+      </tr>
+    </table>
+    <pre><code class="cpp" data-trim data-noescape>
+std::map&lt;std::string, int&gt; get_map();
+for (<mark>const auto&amp; [k, v]</mark> : get_map())
+  // ...
+    </code></pre>
+    <p>эквивалентно</p>
+    <pre><code class="cpp" data-trim>
+for (auto&amp;&amp; __kv : get_map()) {
+  const auto&amp; k = std::get&lt;0&gt;(__kv);
+  const auto&amp; v = std::get&lt;1&gt;(__kv);
+  {
+    // ...
+  }
+}
+    </code></pre>
+
+    <aside class="notes">
+      <p>Рассказать про обозначения. Ближайшая версия GCC &mdash; 7.1, будет скорее всего выпущена
+        в марте 2017, а Clang &mdash; 4.0, в феврале. У GCC более длинный релизный цикл, поэтому
+        большинство возможностей C++17 будут в следующем релизе, тогда как в Clang доступны уже
+        в 3.9.</p>
+      <p>Structured bindinds &mdash; зачатки pattern matching (ср. с ML, Scala, Rust).
+        Напоминает множественно присваивание в Python.</p>
+      <p>Здесь показана версия для класса, поддеривающего протокол tuple. Компилятор пытается найти
+        у класса метод tuple_size (или подходящую свбодную функцию tuple_size). Если ему это
+        удаётся, используются шалонные методы (или функции) get.</p>
+      <p>Вместо <tt>const auto&amp;</tt> можно написать просто auto (тогда данные будут
+        копироваться) или, например, <tt>auto&amp;</tt>.</p>
+    </aside>
+  </section>
+
+  <section>
+    <p>Поддерживается работа со структурами и массивами:</p>
+    <pre><code class="cpp" data-trim>
+struct foo {
+  int i;
+  char c;
+};
+
+foo f{1, &apos;a&apos;};
+auto&amp; [ii, cc] = f;
+    </code></pre>
+    <p>Рекурсивная версия &mdash; в C++Next.</p>
+  </section>
+
+  <!-- Template argument deduction for class templates -->
+  <section>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>GCC</th><th>Clang</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0091r3.html"
+          class="paper">P0091R3</a></td>
+        <td>Template argument deduction for class templates</td>
+        <td class="next">7</td>
+        <td class="no">-</td>
+      </tr>
+    </table>
+    <pre><code class="cpp" data-trim>
+std::pair p(2, 4.5); // выводится std::pair&lt;int, double&gt;
+std::vector v(begin_iter, end_iter); // выводится std::vector&lt;...&gt;
+    </code></pre>
+    <p>Deduction guide:</p>
+    <pre><code class="cpp" data-trim>
+      template&lt;typename Iter&gt; vector(Iter b, Iter e)
+  -&gt; vector&lt;typename iterator_traits&lt;Iter&gt;::value_type&gt;;
+    </code></pre>
+    <aside class="notes">
+      <p>Вывод аргументов шаблонов для шаблонов классов &mdash; ещё одна относительно важная
+        возможность. Он позволит выводить аргументы шаблона из типов параметров конструктора и
+        избавиться от костылей типа <tt>make_pair</tt> и <tt>make_tuple</tt>.</p>
+      <p>Иногда связь между типами нетривиальна, как в примере в созданием вектора из пары
+        итераторов. Для этого случая используются explicit deduction guides.</p>
+      <p>По поводу этой фичи было сломано много копий в LEWG.</p>
+    </aside>
+  </section>
+
+  <!-- constexpr if-statements -->
+  <section>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>GCC</th><th>Clang</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0292r2.html"
+          class="paper">P0292R2</a></td>
+        <td>constexpr if-statements</td>
+        <td class="next">7</td>
+        <td class="current">3.9</td>
+      </tr>
+    </table>
+
+    <pre><code class="cpp" data-trim data-noescape>
+template&lt;typename T, typename ... Rest&gt;
+void g(T&amp;&amp; p, Rest&amp;&amp; ...rs) {
+  // ... обработать p
+  if <mark>constexpr</mark> (sizeof...(rs) &gt; 0)
+    g(rs...);  // при пустом списке аргументов эта часть не инстанциируется
+}
+    </code></pre>
+    <aside class="notes">
+      <p>constexpr if полезен при написании сложных шаблонов</p>
+      <p>Допускается только в телах функций, т.е. с помощью constexpr if
+        не получится "выключать" отдельные поля классов. Такое предложение рассматривалось (и
+        называлось static_if), но было отвергнуто.</p>
+    </aside>
+  </section>
+
+  <!-- Selection statements with initializer -->
+  <section>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>GCC</th><th>Clang</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0305r1.html"
+          class="paper">P0305R1</a></td>
+        <td>Selection statements with initializer</td>
+        <td class="next">7</td>
+        <td class="current">3.9</td>
+      </tr>
+    </table>
+    <p>Было:</p>
+    <pre><code class="cpp" data-trim style="font-size: 18px;">
+{
+  auto p = m.try_emplace(key, value);
+  if (!p.second) {
+    FATAL(&quot;Element already registered&quot;);
+  } else {
+    process(p.second);
+  }
+}
+    </code></pre>
+    <p>Стало:</p>
+    <pre><code class="cpp" data-trim data-noescape style="font-size: 18px;">
+if (auto p = m.try_emplace(key, value)<mark>; !p.second</mark>) {
+  FATAL(&quot;Element already registered&quot;);
+} else {
+  process(p.second);
+}
+    </code></pre>
+    <aside class="notes">
+      <p>Перенято из языка Go</p>
+      <p>Допускается в if и switch.</p>
+    </aside>
+  </section>
+
+  <!-- Stricter expression evaluation order -->
+  <section>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>GCC</th><th>Clang</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0145r3.pdf"
+          class="paper">P0145R3</a></td>
+        <td>Stricter expression evaluation order</td>
+        <td class="next">7</td>
+        <td class="next">trunk</td>
+      </tr>
+    </table>
+    <pre><code class="cpp" data-trim>
+#include &lt;map&gt;
+int main() {
+  std::map&lt;int, int&gt; m;
+  m[0] = m.size();
+}
+    </code></pre>
+    <p>Зафиксирован порядок вычисления:</p>
+    <p><ul>
+      <li><tt>a.b</tt>, <tt>a->b</tt>, <tt>a->*b</tt>, <tt>a[b]</tt> &mdash; слева направо</li>
+      <li><tt>a << b</tt>, <tt>a >> b</tt> &mdash; слева направо</li>
+      <li><tt>b = a</tt>, <tt>b += a</tt>, <tt>b -= a</tt>, &hellip; &mdash; справа налево</li>
+    </ul></p>
+    <aside class="notes">
+      <p>Порядок вычисления операндов у большинства операторов и а также у аргументов функций,
+        как известно unsequenced.</p>
+      <p>Было предложение вычислять аргументы функций слева направо, но оно было отвергнуто.
+        В calling convention x86-64 в Linux те агрументы, которые передаются на стеке, передаются
+        в порядке срава налево и поэтому GCC также вычисляет аргументы "справа налево".
+        В результат на SPEC CPU2006 изменение порядка на противоположный вызвал просадку ~2% на одном
+        из бенчмарков.</p>
+      <p>Порядок зафиксировали для постфиксных выражений, сдвигов и присваиваний.</p>
+    </aside>
+  </section>
+
+  <section>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>GCC</th><th>Clang</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0188r1.pdf"
+          class="paper">P0188R1</a></td>
+        <td>[[fallthrough]] attribute</td>
+        <td class="next">7</td>
+        <td class="current">3.9</td>
+      </tr>
+    </table>
+
+    <pre><code class="cpp" data-trim data-noescape>
+switch (cond) {
+case 0:
+case 1:
+  foo(1);
+  <mark>[[fallthrough]];</mark>
+case 2:
+  bar(2);
+  // falls thru
+case 3:
+  baz(3); // Warning
+case 4:
+  quax(4);
+  break;
+case 5:
+  // ...
+}
+    </code></pre>
+    <tt>g++ test.cc -Wimplicit-fallthrough=3</tt>
+    <aside class="notes">
+      <p>Разработчик с помощью атрибута пометить блоки в операторе switch, которые не
+        заканчиваются break-ом. Комипялтор будет предупредждать в остальных случаях, если задана
+        соотвутствующая опция</p>
+      <p>В GCC реализовали разбор комментариев. В зависимости от значения опции разные
+        комментарии могут считаться эквивалентами <tt>[[fallthrough]]</tt>.</p>
+      <p><tt>-Wextra</tt> подразумевает <tt>-Wimplicit-fallthrough=3</tt>.</p>
+    </aside>
+  </section>
+
+  <!-- Стандартизация существующей практики -->
+  <section>
+    <h3>Стандартизация существующей практики</h3>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>GCC</th><th>Clang</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0189r1.pdf"
+          class="paper">P0189R1</a></td>
+        <td>[[nodiscard]] attribute</td>
+        <td class="next">7</td>
+        <td class="current">3.9</td>
+      </tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0212r1.pdf"
+          class="paper">P0212R1</a></td>
+        <td>[[maybe_unused]] attribute</td>
+        <td class="next">7</td>
+        <td class="current">3.9</td>
+      </tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0245r1.html"
+          class="paper">P0245R1</a></td>
+        <td>Hexadecimal floating literals for C++</td>
+        <td class="current">3.0</td>
+        <td class="current">+</td>
+      </tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0061r1.html"
+          class="paper">P0061R1</a></td>
+        <td>__has_include for C++17</td>
+        <td class="current">5</td>
+        <td class="current">+</td>
+      </tr>
+    </table>
+    <aside class="notes">
+      <p>Стандартизованы некоторые расширения компиляторов. <tt>nodiscard</tt> &mdash; аналог
+        <tt>warn_unused_result</tt> в GCC, <tt>maybe_unused</tt> &mdash; аналог <tt>unused</tt>.
+        <tt>__has_include</tt> &mdash; расширение Clang, неплохое дополнение в feature testing
+        macros.</p>
+    </aside>
+  </section>
+
+  <!-- Удалено из стандарта -->
+  <section>
+    <h3>Удалено из стандарта</h3>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>GCC</th><th>Clang</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4086.html"
+          class="paper">N4086</a></td>
+        <td>Removing trigraphs??!</td>
+        <td class="current">5</td>
+        <td class="current">3.5</td>
+      </tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0001r1.html"
+          class="paper">P0001R1</a></td>
+        <td>Remove deprecated register storage class</td>
+        <td class="next">7</td>
+        <td class="current">3.8</td>
+      </tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0002r1.html"
+          class="paper">P0002R1</a></td>
+        <td>Remove deprecated bool increment</td>
+        <td class="next">7</td>
+        <td class="current">3.8</td>
+      </tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0003r5.html"
+          class="paper">P0003R5</a></td>
+        <td>Removing deprecated dynamic exception specifications</td>
+        <td class="next">7</td>
+        <td class="next">trunk</td>
+      </tr>
+    </table>
+    <aside class="notes">
+      <p>Некоторые возможности, ранее объявленные как deprecated, удалены из стандарта. Впрочем,
+        стандарт разрешает разработчикам компиляторов поддерживать их в качестве расширений.</p>
+      <p>register storage class был актуален со старыми компиляторыми, в которых алгоритмы
+        выделения регистров давали плохой результат без подсказок.</p>
+      <p>exception specifications &mdash; разрешены пустые списки типов исключений,
+        аналог noexcept</p>
+    </aside>
+  </section>
+
+  <!-- C++17 LIB  -->
+
+  <!-- Изменения в стандартной библиотеке -->
+  <section>
+    <h2>Изменения в стандартной библиотеке</h2>
+    <p>83 предложения</p>
+  </section>
+
+  <!-- Parallelism TS -->
+  <section>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>libstdc++</th><th>libc++</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0024r2.html"
+          class="paper">P0024R2</a></td>
+        <td>The Parallelism TS Should be Standardized</td>
+        <td class="no">-</td>
+        <td class="no">-</td>
+      </tr>
+    </table>
+    <p><a href="https://www.youtube.com/watch?v=Vck6kzWjY88">
+      <i class="fa fa-youtube-play"></i> The C++17 Parallel Algorithms Library and Beyond</a></p>
+    <p>Параллельные версии алгоритмов и новые алгоритмы, в т.ч.:</p>
+    <p><ul>
+      <li><tt>for_each</tt></li>
+      <li><tt>accumulate</tt> и <tt>reduce</tt></li>
+    </ul></p>
+  </section>
+
+  <!-- File System TS -->
+  <section>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>libstdc++</th><th>libc++</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0218r1.html"
+          class="paper">P0218R1</a></td>
+        <td>Adopt the File System TS for C++17</td>
+        <td class="no">-</td>
+        <td class="no">-</td>
+      </tr>
+    </table>
+    <p>Основные функции:</p>
+    <p><ul>
+      <li>работа с путями</li>
+      <li>перечисление файлов в директории</li>
+      <li>создание директорий и ссылок</li>
+      <li>копирование и перемещение файлов</li>
+      <li>запрос свойств файлов, директорий и ФС</li>
+      <li>запрос и изменение прав доступа</li>
+    </ul></p>
+    <aside class="notes">
+      <p>File System TS во многом аналогчно Boost Filesystem. В отличие от всей остальной
+        стандартной библиотеки, большинство функций имеют дополнительную noexcept-версию,
+        возвращающую код ошибки по ссылке.</p>
+      <p>Основано на стандарте POSIX.</p>
+      <p>Входит в GCC 5.3 (experimental).</p>
+    </aside>
+  </section>
+
+  <!-- std::variant -->
+  <section>
+    <h3><tt>std::variant</tt></h3>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>libstdc++</th><th>libc++</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0088r3.html"
+          class="paper">P0088R3</a></td>
+        <td>Variant: a type-safe union for C++17</tt></td>
+        <td class="next">7</td>
+        <td class="next">4.0</td>
+      </tr>
+    </table>
+    <pre><code class="cpp" data-trim data-noescape>
+std::variant&lt;int, float&gt; v;
+v = 12;
+std::cout &lt;&lt; std::get&lt;int&gt;(v);
+          &lt;&lt; std::get&lt;0&gt;(v);
+std::cout &lt;&lt; std::get&lt;float&gt;(v);  // вызовет std::bad_variant_access
+v.index();             // 0
+std::get_if&lt;float&gt;(v); // nullptr
+    </code></pre>
+  </section>
+
+  <!-- Library Fundamentals V1 TS -->
+  <section>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>libstdc++</th><th>libc++</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0220r1.html"
+          class="paper">P0220R1</a></td>
+        <td>Adopt Library Fundamentals V1 TS Components for C++17</td>
+        <td class="next">7</td>
+        <td class="next">4.0</td>
+      </tr>
+    </table>
+    <p><ul>
+      <li><tt>optional</tt></li>
+      <li><tt>any</tt></li>
+      <li><tt>string_view</tt></li>
+      <li>полиморфные аллокаторы</li>
+    </ul></p>
+    <aside class="notes">
+      <p>Помимо перечисленного в Lib Fundamentals входят алгоритмы поиска подстроки
+        (Бойера-Мура и Бойера-Мура-Хорспула) и псевдослучайных выборок (sampling), а также
+        функция apply, позволяющая распаковать тупл и вызвать функцию с элементами тупла в
+        качестве параметров.</p>
+    </aside>
+  </section>
+
+  <!-- std::optional -->
+  <section>
+    <h3><tt>std::optional</tt></h3>
+    <pre><code class="cpp" data-trim>
+std::optional&lt;some_class&gt; compute();
+
+auto opt = compute();
+if (opt)
+  opt-&gt;do_something();
+    </code></pre>
+  </section>
+
+  <!-- std::any -->
+  <section>
+    <h3><tt>std::any</tt></h3>
+    <pre><code class="cpp" data-trim data-noescape>
+std::any val{"Hello"s};
+auto&amp; str_val = std::any_cast&lt;std::string&gt;(val); // OK
+const int *int_val = std::any_cast&lt;int&gt;(&amp;val);   // int_val == nullptr
+long long_val = std::any_cast&lt;long&gt;(val);  // исключение std::bad_any_cast
+    </code></pre>
+    <aside class="notes">
+      <p>Тип any удобен для хранения разнородных элементов в контейнере, например для
+        создания property map.</p>
+    </aside>
+  </section>
+
+  <!-- std::string_view -->
+  <section>
+    <h3><tt>std::string_view</tt></h3>
+    <p>Также известен как <tt>boost::string_ref</tt>.</p>
+    <p>Упрощенно <tt>string_view</tt> &mdash; это</p>
+    <pre><code class="cpp" data-trim data-noescape>
+class string_view {
+  const char* m_data;
+  size_t m_length;
+public:
+  // ...
+};
+    </code></pre>
+    <p>+ большинство методов <tt>std::string</tt></p>
+  </section>
+
+  <section>
+    <h4>Интеграция <tt>std::string_view</tt></h4>
+    <table class="proposal">
+      <tr><th colspan="2"></th><th>libstdc++</th><th>libc++</th></tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0254r2.pdf"
+          class="paper">P0254R2</a></td>
+        <td>Integrating <tt>std::string_view</tt> and <tt>std::string</tt></td>
+        <td class="next">7</td>
+        <td class="next">4.0</td>
+      </tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0392r0.pdf"
+          class="paper">P0392R0</a></td>
+        <td>Adapting <tt>string_view</tt> by filesystem paths</td>
+        <td class="no">-</td>
+        <td class="next">4.0</td>
+      </tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0403r1.html"
+          class="paper">P0403R1</a></td>
+        <td>Literal suffixes for <tt>basic_string_view</tt></td>
+        <td class="no">-</td>
+        <td class="no">-</td>
+      </tr>
+      <tr>
+        <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0426r1.html"
+          class="paper">P0426R1</a></td>
+        <td>Constexpr for <tt>std::char_traits</tt></td>
+        <td class="no">-</td>
+        <td class="no">-</td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- TS -->
+
+  <!-- Технические спецификации -->
+  <section>
+    <h2>Технические спецификации</h2>
+    <p><ul class="fa-ul">
+      <li><i class="fa-li fa fa-check-square"></i>File System</li>
+      <li><i class="fa-li fa fa-check-square"></i>Parallelism</li>
+      <li><i class="fa-li fa fa-check-square"></i>Library Fundamentals V1</li>
+      <li><i class="fa-li fa fa-fw"></i>Concurrency</li>
+      <li><i class="fa-li fa fa-fw"></i>Transactional memory</li>
+      <li><i class="fa-li fa fa-fw"></i>Modules</li>
+      <li><i class="fa-li fa fa-fw"></i>Coroutines</li>
+      <li><i class="fa-li fa fa-fw"></i>Concepts</li>
+      <li><i class="fa-li fa fa-fw"></i>Ranges</li>
+      <li><i class="fa-li fa fa-fw"></i>Networking</li>
+    </ul></p>
+  </section>
+
+  <!-- О технических спецификациях -->
+  <section>
+    <h3>О технических спецификациях</h3>
+    <p><em>How will all of the above [Networking TS, Concurrency TS, Coroutines] work
+      together?</em></p>
+    <i class="fa fa-quote-left fa-2x fa-pull-left fa-border" aria-hidden="true"></i>
+    <p>Jonathan Wakely: They might not. The point of publishing each piece of work as a
+    separate TS is to get implementation experience and user feedback before anything is added to
+    the standard and set in stone. The approach in one TS doesn't necessarily have to agree or
+    interoperate with the approach in another TS. They are experimental ideas and are not intended
+    to form a single, cohesive design.</p>
+    <aside class="notes">
+      <p>Это цитата Джонатана Уэйкли, главного разработчика libstdc++. "Могут и не заработать.
+      Смысл публикации ТС по отдельности в том, чтобы фидбэк от их использования до того как
+      добавить их в стандарт навсегда. Подходы в одной ТС не всегда согласованы с подходами
+      в других ТС. Это экспериментальные идеи, а не часть единого замысла."</p>
+    </aside>
+  </section>
+
+  <!-- Модули -->
+  <section>
+    <h3>Модули</h3>
+    <p><ul>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4610.pdf" class="paper">N4610</a>
+        Extensions to C++ for Modules</li>
+      <li>Gabriel Dos Reis <a href="https://www.youtube.com/watch?v=RwdQA0pGWa4">
+        <i class="fa fa-youtube-play"></i> Large Scale C++ with Modules: What You Should Know</a></li>
+      <li>Документация Clang: <a href="http://clang.llvm.org/docs/Modules.html">Modules</a></li>
+    </ul></p>
+    <pre><code class="cpp" data-trim>
+module M;
+export int f(int x) {
+  return 2 + x;
+}
+    </code></pre>
+    <pre><code class="cpp" data-trim>
+import M;
+int main() {
+  f(5);
+  return 0;
+}
+    </code></pre>
+    <aside class="notes">
+      <p>Проблемы с текущим механизмом include-файлов:</p>
+      <p><ul>
+        <li>скорость компиляции</li>
+        <li>хрупкость из-за макросов</li>
+        <li>сложности для инструментария</li>
+      </ul></p>
+      <p>Существуют экспериментальные реализации в Clang и MSVC. Google использует свою реализацию
+        в production и дают фидбэк.</p>
+      <p>По сути, модуль &mdash; это бинарное представление AST, схожее с precompiled header.</p>
+    </aside>
+  </section>
+
+  <!-- Транзакционная память -->
+  <section>
+    <h3>Транзакционная память</h3>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4514.pdf"
+      class="paper">N4514</a> C++ Extensions for Transactional Memory</p>
+    <p>Добавляются блоки</p>
+    <p><ul>
+      <li><tt>synchronized</tt></li>
+      <li><tt>atomic_noexcept</tt></li>
+      <li><tt>atomic_cancel</tt></li>
+      <li><tt>atomic_commit</tt></li>
+    </ul></p>
+    <p>и ключевое слово <tt>transaction_safe</tt>.</p>
+  </section>
+
+  <section>
+    <h4>Пример</h4>
+    <pre><code class="cpp" data-trim data-noescape>
+int transform_int(int) <mark>transaction_safe</mark>;
+
+int foo() {
+   static int i = 0;
+   <mark>atomic_noexcept</mark> {
+     i = transform_int(i);
+     return i; // commit
+   }
+}
+    </code></pre>
+    <p>Сборка:</p>
+    <p><tt>g++ -fgnu-tm test.cc</tt></p>
+    <aside class="notes">
+      <p>synchronized и atomic блоки выполняются атомарно. <tt>atomic_*</tt> различаются обработкой
+        исключений:</p>
+        <p><ul>
+          <li><tt>noexcept</tt> вызывает std::abort</li>
+          <li><tt>commit</tt> применяет и завершает транзакцию</li>
+          <li><tt>cancel</tt> отменяет транзакцию</li>
+        </ul></p>
+      <p>Внтури атомарного блока разрешается вызывать только <tt>transaction_safe</tt>-функции,
+        в т.ч. выделение и освобождение памяти. Запрещается ввод-вывод</p>
+      <p>Реализовано в GCC (начиная с 4.7). STM+HTM.</p>
+      <p>synchronized выполняет код под мьютексом</p>
+    </aside>
+  </section>
+
+  <!-- Сопрограммы -->
+  <section>
+    <h3>Сопрограммы</h3>
+    <p><ul>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0057r7.pdf" class="paper">P0057R7</a>
+        Wording for Coroutines</li>
+      <li>Gor Nishanov
+        <a href="https://www.youtube.com/watch?v=_fu0gx-xseY"><i class="fa fa-youtube-play"></i>
+        C++ Coroutines &mdash; a negative overhead abstraction</a></li>
+    </ul></p>
+    <pre><code class="cpp" data-trim>
+generator hello() {
+  for (auto ch : &quot;Hello, &quot;)
+    co_yield ch;
+  for (auto ch : &quot;world&quot;)
+    co_yield ch;
+}
+
+int main() {
+  for (char ch : hello())
+    cout &lt;&lt; ch;
+}
+    </code></pre>
+    <aside class="notes">
+      <p>Три новых ключевых слова: <tt>co_await</tt>, <tt>co_yield</tt>, <tt>co_return</tt>.
+        Функция, в которой используется хотя бы одно из них называется корутиной.</p>
+      <p>Соблюдается бинарная совместимость с обычными функциями, т.е. вызов корутины &mdash; это
+        обычный вызов, указатель на корутину можно преобразовать в <tt>void*</tt>.</p>
+      <p>При вызове создаётся объект (side stack), в котором будут храниться локальные переменные
+        и PC. Память выделяется в куче либо (если возможно) в кадре вызывающей функции. Указатель
+        на этот объект сохраняется в дескрипторе, который возвращается из корутины. Через
+        дескриптор можно продолжить выполнение корутины и получить возвращаемое значение.</p>
+    </aside>
+  </section>
+
+  <!-- Concurrency -->
+  <section>
+    <h3>Concurrency</h3>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0159r0.html"
+      class="paper">P0159R0</a> C++ Extensions for Concurrency</p>
+    <p><ul>
+      <li>композиция <tt>future</tt>:
+        <ul>
+          <li><tt>when_all</tt></li>
+          <li><tt>when_any</tt></li>
+          <li><tt>then</tt></li>
+        </ul>
+      </li>
+      <li><tt>latch</tt> и <tt>barrier</tt></li>
+      <li>атомарные умные указатели</li>
+    </ul></p>
+  </section>
+
+  <!-- Networking -->
+  <section>
+    <h3>Networking</h3>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4625.pdf"
+      class="paper">N4625</a> C++ Extensions for Networking</p>
+    <p>Предложение основано на библиотеке <a href="https://think-async.com/">ASIO</a></p>
+    <ul>
+      <li>асинхронная модель</li>
+      <li>буферы</li>
+      <li>сокеты и потоки</li>
+      <li>протоколы IP4, IP6, TCP, UDP</li>
+    </ul>
+  </section>
+
+  <!-- Концепты -->
+  <section>
+    <h3>Концепты</h3>
+    <p><ul>
+      <li><a href="https://accu.org/index.php/journals/2157"
+        class="paper">N4377</a> C++ Extensions for Concepts</li>
+      <li>Andrew Sutton
+        <a href="https://accu.org/index.php/journals/2157">Introducing Concepts</a></li>
+    </ul></p>
+    <pre><code class="cpp" data-trim>
+template&lt;typename R, typename T&gt;
+bool in(R const&amp; range, T const&amp; value);
+
+int main() {
+  vector&lt;string&gt; v { ... };
+  in(v, 0);
+}
+    </code></pre>
+    <p><tt>g++ test.cc</tt></p>
+    <p>Результат &mdash; сообщение об ошибке из 162 строк</p>
+  </section>
+
+  <!-- Концепты - пример -->
+  <section>
+    <pre><code class="cpp" data-trim data-noescape>
+template&lt;<mark>Range</mark> R, typename T&gt;
+  <mark>requires Equality_comparable&lt;T, Value_type&lt;R&gt;&gt;()</mark>
+bool in(R const&amp; range, T const&amp; value);
+
+int main() {
+  vector&lt;string&gt; v { ... };
+  in(v, 0);
+}
+    </code></pre>
+    <p><tt>g++ -fconcepts test.cc</tt></p>
+    <pre>
+In function 'int main()':
+  error: cannot call function 'bool in(const R&amp;, const T&amp;)'
+     in(v, 0);
+            ^
+  note: constraints not satisfied
+     in(R const&amp; range, T const&amp; value)
+     ^
+  note: concept Equality_comparable&lt;Value_type&lt;vector&lt;string&gt;&gt;, int&gt;()
+  was not satisfied
+    </pre>
+    <aside class="notes">
+      <p>Концепты не меняют семантику программы, а только лишь описывают ограничения на
+        аргументы шаблонов</p>
+      <p>Добавляется синтаксис для описания концептов (наборов ограничений) и их применения
+        к аргументам шаблонов и типам переменных.</p>
+    </aside>
+  </section>
+
+  <!-- Ranges -->
+  <section>
+    <h3>Интервалы</h3>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4622.pdf" class="paper">N4622</a>
+      C++ Extensions for Ranges</p>
+    <p><a href="https://github.com/ericniebler/range-v3"><i class="fa fa-github"></i>
+      range-v3</a></p>
+    <p>Было:</p>
+    <pre><code class="cpp" data-trim data-noescape>
+std::vector&lt;int&gt; v = /* ... */;
+std::sort(v.begin(), v.end());
+    </code></pre>
+    <p>Стало:</p>
+    <pre><code class="cpp" data-trim data-noescape>
+std::vector&lt;int&gt; v = /* ... */;
+std::sort(v);
+    </code></pre>
+    <aside class="notes">
+      <p>Подборка ссылок и примеры есть на гитхабе.</p>
+      <p>Несмотря на название, большая часть proposal-а посвящена интеграции концептов в
+        стандартную библиотеку.</p>
+      <p>Интервал (range) это итератор и sentinel (частный случай: пара итераторов).</p>
+      <p>Библиотека range-v3 определяет 3 набора примитивов для работы интервалами: алгоритмы,
+        действия (action) и представления (view). В стандарт пока что предлагается включить
+        только алгоритмы.</p>
+    </aside>
+  </section>
+
+  <section>
+    <h4>Дальнейшее развитие</h4>
+    <p><ul>
+      <li>action &mdash; немедленные in-place преобразования</li>
+      <li>view &mdash; ленивые преобразования (возвращают новый интервал)</li>
+    </ul></p>
+    <p>Пример (1&sup2; + 2&sup2; + &hellip; + 10&sup2;):</p>
+    <pre><code class="cpp" data-trim data-noescape>
+using namespace ranges;
+int sum = accumulate(view::ints(1)
+                   | view::transform([](int i){return i*i;})
+                   | view::take(10), 0);
+    </code></pre>
+  </section>
+
+  <!-- C++Next -->
+
+  <!-- C++Next title -->
+  <section>
+    <h2>C++Next</h2>
+    <p>Рабочие названия &mdash; C++Next, C++2a</p>
+  </section>
+
+  <!-- reflection -->
+  <section>
+    <h3>Статическая интроспекция (reflection)</h3>
+    <p><ul>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0385r1.pdf"
+        class="paper">P0385R1</a> Static reflection. Rationale, design and evolution.</li>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r2.html"
+        class="paper">P0194R2</a> Static reflection</li>
+    </ul></p>
+    <p>Предоставляет возможность:</p>
+    <p><ul>
+      <li>узнать имена и типы полей структуры</li>
+      <li>получить строковое представление имени типа</li>
+    </ul></p>
+    <aside class="notes">
+      <p>До настоящего времени спецификация разрабатывалась отдельной группой в комитете. На
+        следующей встрече в Коне будет рассмотрена всем комитетом.</p>
+      <p>Добавлен синтаксис для получения мета-объекта для выражения. Метаобъект позволяет
+        итерироваться по полям классов и получать их свойства, а также получать имена
+        различных сущностей.</p>
+      <p>Всё работает в compile time</p>
+    </aside>
+  </section>
+
+  <section>
+    <pre><code class="cpp" data-trim data-noescape>
+float foo = 42.f;
+using foo_type = decltype(foo);
+using meta_foo = <mark>reflexpr</mark>(foo);
+    </code></pre>
+    <p>Область применения:</p>
+    <p><ul>
+      <li>сериализация</li>
+      <li>сравнение и хэширование объектов</li>
+      <li>логирование и отладка (pretty print)</li>
+      <li>ORM</li>
+    </ul></p>
+    <p>В будущем планируется добавить генерацию кода по метаобъектам.</p>
+    <p>Имеется <a href="https://github.com/matus-chochlik/clang/tree/reflexpr">
+      <i class="fa fa-github"></i> прототип</a> (на базе Clang).</p>
+  </section>
+
+  <!-- Операторы сравнения -->
+  <section>
+    <h3>Операторы сравнения</h3>
+    <p><ul>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0221r2.html"
+        class="paper">P0221R2</a> Proposed wording for default comparisons, revision 4</li>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0481r0.pdf"
+        class="paper">P0481R0</a> Bravely Default</li>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0436r1.pdf"
+        class="paper">P0436R1</a> An Extensible Approach to Obtaining Selected Operators</li>
+    </ul></p>
+    <pre><code class="cpp" data-trim data-noescape>
+struct date {
+  int year;
+  int month;
+  int day;
+};
+
+date d1 = /* ... */, d2 = /* ... */;
+if (d1 > d2) {
+  // ...
+} else if (d1 == d2) {
+  // ...
+}
+    </code></pre>
+  </section>
+
+  <section>
+    <h4>Открытые вопросы</h4>
+    <p><ul>
+      <li>opt-in vs opt-out</li>
+      <li>только unordered или unordered+ordered</li>
+      <li>генерировать ли <tt>x&gt;=y</tt> из <tt>!(x&lt;y)</tt> или
+        <tt>x&gt;y || x==y</tt></li>
+      <li>three-way comparison: <tt>int operator&lt;=&gt;</tt></li>
+    </ul></p>
+  </section>
+
+  <!-- Контракты -->
+  <section>
+    <h3>Контракты</h3>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0380r1.pdf"
+      class="paper">P0380R1</a> A Contract Design</p>
+    <pre><code class="cpp" data-trim data-noescape>
+void queue::push(int elem)
+  [[ expects: !full() ]]
+  [[ ensures: !empty() ]]
+{
+  // ...
+  [[ assert: is_ok() ]];
+  // ...
+}
+    </code></pre>
+    <aside class="notes">
+      <p>Контракты &mdash; предложение от Microsoft.</p>
+      <p>Осуществляют проверку инвариантов в runtime, т.е. усовершенствованная версия макроса
+        assert.</p>
+      <p>Могут использоваться совместно со статическим анализатором.</p>
+    </aside>
+  </section>
+
+  <!-- Оператор "точка" -->
+  <section>
+    <h3>Оператор "точка"</h3>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0416r1.pdf"
+      class="paper">P0416R1</a> Operator Dot</p>
+    <p>Аналогичен операторам <tt>*</tt> и <tt>-&gt;</tt>.</p>
+    <pre><code class="cpp" data-trim data-noescape>
+template&lt;class X&gt;
+class Ref {
+public:
+  Ref(X&amp; x) :p{&amp;x} {}
+  X&amp; <mark>operator.</mark>() { /* ... */ return *p; }
+  // &hellip;
+private:
+  X* p;
+};
+
+X val;
+Ref<X> ref{val};
+ref.foo(); // (r.operator.()).foo()
+    </code></pre>
+  </section>
+
+  <!-- Унифицированный синтаксис вызова -->
+  <section>
+    <h3>Унифицированный синтаксис вызова</h3>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0301r1.html"
+      class="paper">P0301R1</a>
+      Wording for Unified Call Syntax</p>
+    <pre><code class="cpp" data-trim data-noescape>
+struct S {
+  void foo(int);
+};
+void bar(const S&amp;);
+
+S s;
+.foo(s, 1);  // s.foo(1);
+.s.foo(1);   // s.foo(1);
+.bar(s);     // bar(s);
+.s.bar();    // bar(s);
+    </code></pre>
+    <aside class="notes">
+      <p>В первоначальной версии пытались переделать обычный вызов функции.</p>
+      <p>При использовании UFC в overload resolution участвуют как свободная функция, так и метод.
+        При прочих равных метод имеет приоритет.</p>
+    </aside>
+  </section>
+
+  <!-- Гетерогенные среды исполнения -->
+  <section>
+    <h3>Гетерогенные среды исполнения</h3>
+    <p><ul>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0363r0.pdf"
+        class="paper">P0363R0</a>
+        Towards support for Heterogeneous Devices in C++ (Language aspects)</li>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0362r0.pdf"
+        class="paper">P0362R0</a>
+        Towards support for Heterogeneous Devices in C++ (Concurrency aspects)</li>
+    </ul></p>
+  </section>
+
+  <!-- Pattern matching -->
+  <section>
+    <h3>Pattern matching</h3>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0095r1.html"
+      class="paper">P0095R1</a>
+      Pattern Matching and Language Variants</p>
+    <p>Возможные реализации pattern matching:</p>
+    <ul>
+      <li>на базе алгебраического тип-суммы: ML,
+        <a href="https://doc.rust-lang.org/book/patterns.html">Rust</a></li>
+      <li>на базе иерархий классов:
+        <a href="http://docs.scala-lang.org/tutorials/tour/case-classes">Scala</a>,
+        библиотечный подход <a href="http://www.stroustrup.com/OpenPatternMatching.pdf">
+          Open Pattern Matching for C++</a></li>
+      <li>на базе протоколов: structured bindings в C++17,
+        <a href="http://docs.scala-lang.org/tutorials/tour/extractor-objects.html">
+          extractor objects</a> в Scala</li>
+    </ul>
+  </section>
+
+  <!-- Pattern matching - example -->
+  <section>
+    <pre><code class="cpp" data-trim data-noescape>
+<mark>lvariant</mark> command {
+  std::size_t set_score;       // Set the score to the specified value
+  std::monostate fire_missile; // Fire a missile
+  unsigned fire_laser;         // Fire a laser with the specified intensity
+  double rotate;               // Rotate the ship by the specified degrees.
+};
+
+command cmd = command::set_score(10);
+
+<mark>inspect</mark> (cmd) {
+  set_score value =>
+    stream << "Set the score to " << value << ".\n";
+  fire_missile m =>
+    stream << "Fire a missile.\n";
+  fire_laser intensity =>
+    stream << "Fire a laser with " << intensity << " intensity.\n";
+  rotate degrees =>
+    stream << "Rotate by " << degrees << " degrees.\n";
+}
+    </code></pre>
+  </section>
+
+  <!-- РГ21 -->
+
+  <!-- РГ21 title -->
+  <section>
+    <h2>РГ 21</h2>
+    <img src="ru_wg21_1.jpg" style="height: 200px; float: left;">
+    <img src="ru_wg21_2.jpg" style="height: 200px; float: left; padding-left: 20px;">
+    <div style="clear: both;">
+      <a href="https://stdcpp.ru/">stdcpp.ru</a>
+    </div>
+  </section>
+
+  <!-- Антон Полухин -->
+  <section>
+    <img src="antony_polukhin.jpg" style="width: 200px; float: right;">
+    <div style="width:75%;">
+      <h3>Антон Полухин</h3>
+      <p><ul>
+        <li>автор
+          <a href="https://www.amazon.com/Boost-C-Application-Development-Cookbook/dp/1849514887">
+            Boost C++ Application Development Cookbook</a></li>
+        <li>мэйнтейнер
+          <a href="http://www.boost.org/doc/libs/1_62_0/doc/html/boost_dll.html">Boost.DLL</a></li>
+      </ul></p>
+    </div>
+  </section>
+
+  <!-- Нужно больше constexpr -->
+  <section>
+    <h2>Нужно больше constexpr</h2>
+    <p><ul>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0202r1.html"
+        class="paper">P0202R1</a>
+        Add Constexpr Modifiers to Functions in &lt;algorithm&gt; and
+        &lt;utility&gt; Headers</li>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0415r0.html"
+        class="paper">P0415R0</a>
+        Constexpr for std::complex</li>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0426r1.html"
+        class="paper">P0426R1</a>
+        Constexpr for std::char_traits</li>
+    </ul></p>
+  </section>
+
+  <!-- Работа с DLL -->
+  <section>
+    <h2>Работа с DLL</h2>
+    <p>
+      <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0275r0.html"
+      class="paper">P0275R0</a>
+      A Proposal to add Classes and Functions Required for Dynamic Library Load</p>
+    </p>
+    <p>Основные функции:</p>
+    <p><ul>
+      <li>загрузка DLL (SO)</li>
+      <li>получение адреса символа по имени</li>
+      <li>проверка существования символа</li>
+    </ul></p>
+  </section>
+
+  <!-- Атрибут [[visible]] -->
+  <section>
+    <h2>Атрибут [[visible]]</h2>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0276r0.html"
+      class="paper">P0276R0</a> A Proposal to add Attribute [[visible]]</p>
+    <p>Было:</p>
+    <pre><code class="cpp" data-trim>
+#if MSVC
+#   define EXPORT __declspec(dllexport)
+#else
+#   define EXPORT __attribute__((visibility("default")))
+#endif
+
+// Public interface
+EXPORT bool grph_is_tree(const graph&amp; g);
+    </code></pre>
+    <p>Стало:</p>
+    <pre><code class="cpp" data-trim data-noescape>
+<mark>[[visible]]</mark> bool grph_is_tree(const graph&amp; g);
+    </code></pre>
+    <p>Компиляция:<br>
+      <span style="font-size: 36px;"><tt>g++ -shared -fvisibility=hidden &hellip;</tt></span></p>
+  </section>
+
+  <!-- Intrinsic-функции для микробенчмарков -->
+  <section>
+    <h2>Intrinsic-функции для микробенчмарков</h2>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0412r0.html"
+      class="paper">P0412R0</a> Benchmarking Primitives</p>
+  </section>
+
+  <!-- Intrinsic-функции для микробенчмарков - Пример -->
+  <section>
+    <h3>Пример</h3>
+    <pre><code class="cpp" data-trim style="font-size: 18px;">
+#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+
+double perform_computation(int);
+
+void benchmark()
+{
+    using namespace std;
+    auto start = chrono::high_resolution_clock::now();
+    double answer = perform_computation(42);
+    auto delta = chrono::high_resolution_clock::now() - start;
+    cout &lt;&lt; "The answer is: " &lt;&lt; answer &lt;&lt; ". The computation took "
+         &lt;&lt; chrono::duration_cast&lt;chrono::milliseconds&gt;(delta).count()
+         &lt;&lt; " ms";
+}
+    </code></pre>
+  </section>
+
+  <!-- Intrinsic-функции для микробенчмарков - proposal -->
+  <section>
+    <h3>Предложение P0412R0</h3>
+    <p><ul>
+      <li><tt>touch</tt> &mdash; помечает glvalue как "модифицированное"</li>
+      <li><tt>keep</tt> &mdash; помечает значение как "прочитанное"</li>
+    </p></ul>
+  </section>
+
+  <!-- Исправленный пример -->
+  <section>
+    <h3>Исправленный пример</h3>
+    <pre><code class="cpp" data-trim style="font-size: 18px;" data-noescape>
+#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include &lt;benchmark&gt;
+
+double perform_computation(int);
+
+void benchmark()
+{
+    using namespace std;
+    auto start = chrono::high_resolution_clock::now();
+    int value = 42;
+    <mark>experimental::benchmark::touch(value);</mark>
+    double answer = perform_computation(value);
+    <mark>experimental::benchmark::keep(answer);</mark>
+    auto delta = chrono::high_resolution_clock::now() - start;
+    cout &lt;&lt; "The answer is: " &lt;&lt; answer &lt;&lt; ". The computation took "
+         &lt;&lt; chrono::duration_cast&lt;chrono::milliseconds&gt;(delta).count()
+         &lt;&lt; " ms";
+}
+    </code></pre>
+  </section>
+
+  <!-- Мои предложения в стандартную библиотеку -->
+  <section>
+    <h2>Мои предложения в стандартную библиотеку</h2>
+  </section>
+
+  <!-- String Prefix and Suffix Checking -->
+  <section>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0457r0.html"
+      class="paper">P0457R0</a> String Prefix and Suffix Checking</p>
+    <p>Предагается добавить методы</p>
+    <p><ul>
+      <li><tt>starts_with</tt></li>
+      <li><tt>ends_with</tt></li>
+    </ul></p>
+    <p>к шаблонным классам</p>
+    <p><ul>
+      <li><tt>std::basic_string</tt></li>
+      <li><tt>std::basic_string_view</tt></li>
+    </ul></p>
+  </section>
+
+  <!-- Checking for Existence of an Element in Associative Containers -->
+  <section>
+    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0458r0.html"
+      class="paper">P0458R0</a> Checking for Existence of an Element in Associative Containers</p>
+    <p>Было:</p>
+    <pre><code class="cpp" data-trim>
+if (some_set.find(element) != some_set.end()) {
+// ...
+}
+    </code></pre>
+    <p>Стало:</p>
+    <pre><code class="cpp" data-trim data-noescape>
+if (some_set.<mark>contains(element)</mark>) {
+// ...
+}
+    </code></pre>
+  </section>
+
+  <!-- Планы на будущее -->
+  <section>
+    <h3>Планы на будущее</h3>
+    <p>Включить в стандарт новые функции для форматного вывода a-la
+      <a href="http://fmtlib.net/">fmtlib</a>,
+      <a href="https://docs.python.org/3.6/library/string.html#formatstrings">Python</a>,
+      <a href="https://doc.rust-lang.org/std/fmt/">Rust</a>:</p>
+    <pre><code class="cpp" data-trim>
+uint32_t errc;
+string_view msg;
+
+// C-style
+printf("Error 0x%08x: '%.*s'\n", errc, (int)msg.size(), msg.data());
+
+// iostream
+cout << "Error 0x" << setw(8) << setfill('0') << ios::hex << errc
+     << ": '" << msg << "'\n";
+
+// fmtlib
+fmt::print("Error 0x{:08x}: '{}'\n", errc, msg);
+    </code></pre>
+  </section>
+
+  <!-- Спасибо за внимание! -->
+  <section>
+    <h1>Спасибо за внимание!</h1>
+  </section>
+
+</div></div>
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      history: true,
+      /* showNotes: true, */
+      slideNumber: true,
+      transition: 'fade',
+      transitionSpeed: 'fast',
+      dependencies: [
+        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: 'plugin/line-numbers/line-numbers.js' },
+      ]
+    });
+  </script>
+</body>
+</html>
