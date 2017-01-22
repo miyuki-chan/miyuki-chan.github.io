@@ -19,10 +19,13 @@
       border: none;
       box-shadow: none;
     }
-    .reveal pre { width: 100%; }
+    .reveal pre {
+      font-size: 26px;
+      width: 100%;
+    }
     .reveal pre code {
-      /* line-height: normal;
-      font-size: 30px; */
+      line-height: normal;
+      font-size: 26px;
       max-height: 600px;
     }
     .reveal tt {
@@ -54,6 +57,14 @@
       color: green;
     }
 
+    table.compare-code {
+      width: 100%;
+    }
+    table.compare-code td {
+      padding: 0;
+      border: none;
+    }
+
     /* For "todo" */
     .reveal .slides span.todo:before { content: "TODO "; }
     .reveal .slides span.todo {
@@ -75,6 +86,14 @@
     }
     .reveal .slides div.center-wrapper { text-align: center; }
     .reveal .slides img.logo { display: inline-block; }
+
+    /* Title and last slide - short link to this presentation */
+    .reveal .slides div.link-bitly {
+      padding-top: 36px;
+      font-size: 48px;
+      font-family: monospace;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
@@ -85,6 +104,9 @@
     <div class="center-wrapper"><b>Михаил Мальцев</b></div>
     <div class="center-wrapper">
       <img src="my_mail_ru.png" class="logo">
+    </div>
+    <div class="link-bitly"><a href="https://bit.ly/2jIjxTU">
+      <i class="fa fa-external-link"></i> bit.ly/2jIjxTU</a>
     </div>
     <aside class="notes">
       <p>Представиться.</p>
@@ -105,8 +127,6 @@
       <li>Россия в комитете C++</li>
     </ol></p>
   </section>
-
-  <!-- C++17 CORE  -->
 
   <!-- Комитет WG21 -->
   <section>
@@ -305,7 +325,8 @@ template&lt;typename T, typename ... Rest&gt;
 void g(T&amp;&amp; p, Rest&amp;&amp; ...rs) {
   // ... обработать p
   if <mark>constexpr</mark> (sizeof...(rs) &gt; 0)
-    g(rs...);  // при пустом списке аргументов эта часть не инстанциируется
+    g(rs...);  // при пустом списке аргументов эта часть
+               // не инстанциируется
 }
     </code></pre>
     <aside class="notes">
@@ -328,8 +349,11 @@ void g(T&amp;&amp; p, Rest&amp;&amp; ...rs) {
         <td class="current">3.9</td>
       </tr>
     </table>
-    <p>Было:</p>
-    <pre><code class="cpp" data-trim style="font-size: 18px;">
+    <table class="compare-code">
+      <tr>
+        <td>Было:</td>
+        <td>
+          <pre><code class="cpp" data-trim>
 {
   auto p = m.try_emplace(key, value);
   if (!p.second) {
@@ -338,15 +362,22 @@ void g(T&amp;&amp; p, Rest&amp;&amp; ...rs) {
     process(p.second);
   }
 }
-    </code></pre>
-    <p>Стало:</p>
-    <pre><code class="cpp" data-trim data-noescape style="font-size: 18px;">
+          </code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>Стало:</td>
+        <td>
+          <pre><code class="cpp" data-trim data-noescape>
 if (auto p = m.try_emplace(key, value)<mark>; !p.second</mark>) {
   FATAL(&quot;Element already registered&quot;);
 } else {
   process(p.second);
 }
-    </code></pre>
+          </code></pre>
+        </td>
+      </tr>
+    </table>
     <aside class="notes">
       <p>Перенято из языка Go</p>
       <p>Допускается в if и switch.</p>
@@ -362,7 +393,7 @@ if (auto p = m.try_emplace(key, value)<mark>; !p.second</mark>) {
           class="paper">P0145R3</a></td>
         <td>Stricter expression evaluation order</td>
         <td class="next">7</td>
-        <td class="next">trunk</td>
+        <td class="next">4.0</td>
       </tr>
     </table>
     <pre><code class="cpp" data-trim>
@@ -406,8 +437,7 @@ int main() {
 switch (cond) {
 case 0:
 case 1:
-  foo(1);
-  <mark>[[fallthrough]];</mark>
+  foo(1); <mark>[[fallthrough]];</mark>
 case 2:
   bar(2);
   // falls thru
@@ -416,7 +446,6 @@ case 3:
 case 4:
   quax(4);
   break;
-case 5:
   // ...
 }
     </code></pre>
@@ -504,7 +533,7 @@ case 5:
           class="paper">P0003R5</a></td>
         <td>Removing deprecated dynamic exception specifications</td>
         <td class="next">7</td>
-        <td class="next">trunk</td>
+        <td class="next">4.0</td>
       </tr>
     </table>
     <aside class="notes">
@@ -594,7 +623,10 @@ std::variant&lt;int, float&gt; v;
 v = 12;
 std::cout &lt;&lt; std::get&lt;int&gt;(v);
           &lt;&lt; std::get&lt;0&gt;(v);
-std::cout &lt;&lt; std::get&lt;float&gt;(v);  // вызовет std::bad_variant_access
+
+// вызовет std::bad_variant_access
+std::cout &lt;&lt; std::get&lt;float&gt;(v);
+
 v.index();             // 0
 std::get_if&lt;float&gt;(v); // nullptr
     </code></pre>
@@ -635,6 +667,10 @@ std::optional&lt;some_class&gt; compute();
 auto opt = compute();
 if (opt)
   opt-&gt;do_something();
+
+// Или:
+if (opt.has_value())
+  opt.value().do_something();
     </code></pre>
   </section>
 
@@ -644,8 +680,12 @@ if (opt)
     <pre><code class="cpp" data-trim data-noescape>
 std::any val{"Hello"s};
 auto&amp; str_val = std::any_cast&lt;std::string&gt;(val); // OK
-const int *int_val = std::any_cast&lt;int&gt;(&amp;val);   // int_val == nullptr
-long long_val = std::any_cast&lt;long&gt;(val);  // исключение std::bad_any_cast
+
+// int_val == nullptr
+const int *int_val = std::any_cast&lt;int&gt;(&amp;val);
+
+// исключение std::bad_any_cast
+long long_val = std::any_cast&lt;long&gt;(val);
     </code></pre>
     <aside class="notes">
       <p>Тип any удобен для хранения разнородных элементов в контейнере, например для
@@ -728,7 +768,7 @@ public:
     <h3>О технических спецификациях</h3>
     <p><em>How will all of the above [Networking TS, Concurrency TS, Coroutines] work
       together?</em></p>
-    <i class="fa fa-quote-left fa-2x fa-pull-left fa-border" aria-hidden="true"></i>
+    <i class="fa fa-quote-left fa-2x fa-pull-left fa-border"></i>
     <p>Jonathan Wakely: They might not. The point of publishing each piece of work as a
     separate TS is to get implementation experience and user feedback before anything is added to
     the standard and set in stone. The approach in one TS doesn't necessarily have to agree or
@@ -746,25 +786,16 @@ public:
   <section>
     <h3>Модули</h3>
     <p><ul>
-      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4610.pdf" class="paper">N4610</a>
-        Extensions to C++ for Modules</li>
-      <li>Gabriel Dos Reis <a href="https://www.youtube.com/watch?v=RwdQA0pGWa4">
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4465.pdf"
+        class="paper">N4465</a> A Module System for C++ &mdash; обоснование</li>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4610.pdf"
+        class="paper">N4610</a> Extensions to C++ for Modules &mdash; формальный текст</li>
+      <li><a href="https://www.youtube.com/watch?v=RwdQA0pGWa4">
         <i class="fa fa-youtube-play"></i> Large Scale C++ with Modules: What You Should Know</a></li>
+      <li><a href="https://www.youtube.com/watch?v=h1E-XyxqJRE">
+        <i class="fa fa-youtube-play"></i> There and Back Again: An Incremental C++ Modules Design</a></li>
       <li>Документация Clang: <a href="http://clang.llvm.org/docs/Modules.html">Modules</a></li>
     </ul></p>
-    <pre><code class="cpp" data-trim>
-module M;
-export int f(int x) {
-  return 2 + x;
-}
-    </code></pre>
-    <pre><code class="cpp" data-trim>
-import M;
-int main() {
-  f(5);
-  return 0;
-}
-    </code></pre>
     <aside class="notes">
       <p>Проблемы с текущим механизмом include-файлов:</p>
       <p><ul>
@@ -778,11 +809,54 @@ int main() {
     </aside>
   </section>
 
+  <section>
+    <h4>Модули, пример</h4>
+    <pre><code class="cpp" data-trim data-noescape>
+// foo.ixx -> M.ifc, foo.obj
+<mark>module M;</mark>
+namespace ns {
+export int foo(int x) {
+  return 2 + x;
+}
+}
+    </code></pre>
+    <pre><code class="cpp" data-trim data-noescape>
+// main.cpp -> main.obj
+<mark>import M;</mark>
+int main() {
+  ns::foo(5);
+  return 0;
+}
+    </code></pre>
+  </section>
+
   <!-- Транзакционная память -->
   <section>
     <h3>Транзакционная память</h3>
     <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4514.pdf"
       class="paper">N4514</a> C++ Extensions for Transactional Memory</p>
+    <pre><code class="cpp" data-trim data-noescape>
+class account {
+public:
+  void deposit(int amount);   // пополнить
+  void withdraw(int amount);  // списать
+  int balance() const;
+  // ...
+};
+
+bool transfer(account&amp; from, account&amp; to, int amount) {
+  if (from.balance() &gt;= amount) {
+    from.withdraw(amount);
+    to.deposit(amount);
+    return true;
+  } else {
+    return false;
+  }
+}
+    </code></pre>
+  </section>
+
+  <section>
     <p>Добавляются блоки</p>
     <p><ul>
       <li><tt>synchronized</tt></li>
@@ -794,20 +868,28 @@ int main() {
   </section>
 
   <section>
-    <h4>Пример</h4>
+    <h4>Исправленный пример</h4>
     <pre><code class="cpp" data-trim data-noescape>
-int transform_int(int) <mark>transaction_safe</mark>;
+class account {
+public:
+  void deposit(int amount) <mark>transaction_safe</mark>;
+  void withdraw(int amount) <mark>transaction_safe</mark>;
+  int balance() const <mark>transaction_safe</mark>;
+  // ...
+};
 
-int foo() {
-   static int i = 0;
-   <mark>atomic_noexcept</mark> {
-     i = transform_int(i);
-     return i; // commit
-   }
+bool transfer(account&amp; from, account&amp; to, int amount) {
+  <mark>atomic_noexcept</mark> {
+    if (from.balance() &gt;= amount) {
+      from.withdraw(amount);
+      to.deposit(amount);
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
     </code></pre>
-    <p>Сборка:</p>
-    <p><tt>g++ -fgnu-tm test.cc</tt></p>
     <aside class="notes">
       <p>synchronized и atomic блоки выполняются атомарно. <tt>atomic_*</tt> различаются обработкой
         исключений:</p>
@@ -933,8 +1015,8 @@ In function 'int main()':
   note: constraints not satisfied
      in(R const&amp; range, T const&amp; value)
      ^
-  note: concept Equality_comparable&lt;Value_type&lt;vector&lt;string&gt;&gt;, int&gt;()
-  was not satisfied
+  note: concept Equality_comparable&lt;Value_type&lt;vector&lt;string&gt;&gt;,
+  int&gt;() was not satisfied
     </pre>
     <aside class="notes">
       <p>Концепты не меняют семантику программы, а только лишь описывают ограничения на
@@ -949,18 +1031,28 @@ In function 'int main()':
     <h3>Интервалы</h3>
     <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4622.pdf" class="paper">N4622</a>
       C++ Extensions for Ranges</p>
-    <p><a href="https://github.com/ericniebler/range-v3"><i class="fa fa-github"></i>
+    <p>Реализация: <a href="https://github.com/ericniebler/range-v3"><i class="fa fa-github"></i>
       range-v3</a></p>
-    <p>Было:</p>
-    <pre><code class="cpp" data-trim data-noescape>
+    <table class="compare-code">
+      <tr>
+        <td>Было:</td>
+        <td>
+          <pre><code class="cpp" data-trim data-noescape>
 std::vector&lt;int&gt; v = /* ... */;
 std::sort(v.begin(), v.end());
-    </code></pre>
-    <p>Стало:</p>
-    <pre><code class="cpp" data-trim data-noescape>
+          </code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>Стало:</td>
+        <td>
+          <pre><code class="cpp" data-trim data-noescape>
 std::vector&lt;int&gt; v = /* ... */;
 std::sort(v);
-    </code></pre>
+          </code></pre>
+        </td>
+      </tr>
+    </table>
     <aside class="notes">
       <p>Подборка ссылок и примеры есть на гитхабе.</p>
       <p>Несмотря на название, большая часть proposal-а посвящена интеграции концептов в
@@ -1048,6 +1140,9 @@ using meta_foo = <mark>reflexpr</mark>(foo);
       <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0436r1.pdf"
         class="paper">P0436R1</a> An Extensible Approach to Obtaining Selected Operators</li>
     </ul></p>
+  </section>
+  <section>
+    <h4>Операторы сравнения, пример</h4>
     <pre><code class="cpp" data-trim data-noescape>
 struct date {
   int year;
@@ -1124,9 +1219,23 @@ ref.foo(); // (r.operator.()).foo()
   <!-- Унифицированный синтаксис вызова -->
   <section>
     <h3>Унифицированный синтаксис вызова</h3>
-    <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0301r1.html"
-      class="paper">P0301R1</a>
-      Wording for Unified Call Syntax</p>
+    <p><ul>
+      <li><a href="https://isocpp.org/blog/2016/02/a-bit-of-background-for-the-unified-call-proposal">
+        A bit of background for the unified call proposal</a></li>
+      <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0301r1.html"
+        class="paper">P0301R1</a> Wording for Unified Call Syntax</li>
+    </ul></p>
+    <p>Различия в синтаксисе вызова: <tt>x.foo()</tt> vs <tt>foo(x)</tt>.</p>
+    <p>Примеры унификации:</p>
+    <p><ul>
+      <li>операторы: <tt>x + y</tt> вызывает <tt>x.operator+(y)</tt> либо
+        <tt>operator+(x,y)</tt></li>
+      <li>range-based циклы: вызывается <tt>range.begin()</tt> либо <tt>begin(range)</tt></li>
+    </ul></p>
+  </section>
+
+  <section>
+    <h4>Унифицированный синтаксис вызова, пример</h4>
     <pre><code class="cpp" data-trim data-noescape>
 struct S {
   void foo(int);
@@ -1163,45 +1272,71 @@ S s;
   <section>
     <h3>Pattern matching</h3>
     <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0095r1.html"
-      class="paper">P0095R1</a>
-      Pattern Matching and Language Variants</p>
-    <p>Возможные реализации pattern matching:</p>
-    <ul>
-      <li>на базе алгебраического тип-суммы: ML,
-        <a href="https://doc.rust-lang.org/book/patterns.html">Rust</a></li>
-      <li>на базе иерархий классов:
-        <a href="http://docs.scala-lang.org/tutorials/tour/case-classes">Scala</a>,
-        библиотечный подход <a href="http://www.stroustrup.com/OpenPatternMatching.pdf">
-          Open Pattern Matching for C++</a></li>
-      <li>на базе протоколов: structured bindings в C++17,
-        <a href="http://docs.scala-lang.org/tutorials/tour/extractor-objects.html">
-          extractor objects</a> в Scala</li>
-    </ul>
+      class="paper">P0095R1</a> Pattern Matching and Language Variants</p>
+    <pre><code class="cpp" data-trim data-noescape>
+enum command_type { set_score, fire_missile, rotate };
+struct command {
+  command_type type;
+  union {
+    std::size_t score;
+    double angle;
+  } data;
+};
+
+switch (cmd.type) {
+  case set_score:
+    stream << "Set the score to " << cmd.data.score; break;
+  case fire_missile:
+    stream << "Fire a missile"; break;
+  case rotate:
+    stream << "Rotate by " << cmd.data.angle << " degrees"; break;
+}
+    </code></pre>
   </section>
 
   <!-- Pattern matching - example -->
   <section>
+    <h4>Pattern matching, пример</h4>
     <pre><code class="cpp" data-trim data-noescape>
 <mark>lvariant</mark> command {
-  std::size_t set_score;       // Set the score to the specified value
-  std::monostate fire_missile; // Fire a missile
-  unsigned fire_laser;         // Fire a laser with the specified intensity
-  double rotate;               // Rotate the ship by the specified degrees.
+  std::size_t set_score;
+  std::monostate fire_missile;
+  double rotate;
 };
 
 command cmd = command::set_score(10);
 
 <mark>inspect</mark> (cmd) {
   set_score value =>
-    stream << "Set the score to " << value << ".\n";
+    stream << "Set the score to " << value;
   fire_missile m =>
-    stream << "Fire a missile.\n";
-  fire_laser intensity =>
-    stream << "Fire a laser with " << intensity << " intensity.\n";
+    stream << "Fire a missile";
   rotate degrees =>
-    stream << "Rotate by " << degrees << " degrees.\n";
+    stream << "Rotate by " << degrees << " degrees";
 }
     </code></pre>
+  </section>
+
+  <!-- Pattern matching, открытые вопросы -->
+  <section>
+    <h4>Pattern matching, открытые вопросы</h4>
+    <p><ul>
+      <li>Как задавать альтернативы:
+        <ul>
+          <li>на базе встроенного типа-суммы: ML,
+            <a href="https://doc.rust-lang.org/book/patterns.html">Rust</a></li>
+          <li>на базе иерархий классов:
+            <a href="http://docs.scala-lang.org/tutorials/tour/case-classes">Scala</a>,
+            библиотечный подход <a href="http://www.stroustrup.com/OpenPatternMatching.pdf">
+            Open Pattern Matching for C++</a></li>
+          <li>на базе протоколов: structured bindings в C++17,
+            <a href="http://docs.scala-lang.org/tutorials/tour/extractor-objects.html">
+            extractor objects</a> в Scala</li>
+        </ul>
+      </li>
+      <li>Как получать доступ к данным (деконструкция)</li>
+      <li>Синтаксис <tt>inspect</tt></li>
+    </ul></p>
   </section>
 
   <!-- РГ21 -->
@@ -1209,8 +1344,8 @@ command cmd = command::set_score(10);
   <!-- РГ21 title -->
   <section>
     <h2>РГ 21</h2>
-    <img src="ru_wg21_1.jpg" style="height: 200px; float: left;">
-    <img src="ru_wg21_2.jpg" style="height: 200px; float: left; padding-left: 20px;">
+    <img src="ru_wg21_1.jpg" style="height: 270px; float: left;">
+    <img src="ru_wg21_2.jpg" style="height: 270px; float: left; padding-left: 20px;">
     <div style="clear: both;">
       <a href="https://stdcpp.ru/">stdcpp.ru</a>
     </div>
@@ -1269,23 +1404,38 @@ command cmd = command::set_score(10);
     <h2>Атрибут [[visible]]</h2>
     <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0276r0.html"
       class="paper">P0276R0</a> A Proposal to add Attribute [[visible]]</p>
-    <p>Было:</p>
-    <pre><code class="cpp" data-trim>
+    <table class="compare-code">
+      <tr>
+        <td>Было:</td>
+        <td>
+          <pre><code class="cpp" data-trim>
 #if MSVC
-#   define EXPORT __declspec(dllexport)
+# define EXPORT __declspec(dllexport)
 #else
-#   define EXPORT __attribute__((visibility("default")))
+# define EXPORT __attribute__((visibility("default")))
 #endif
 
 // Public interface
 EXPORT bool grph_is_tree(const graph&amp; g);
-    </code></pre>
-    <p>Стало:</p>
-    <pre><code class="cpp" data-trim data-noescape>
+          </code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>Стало:</td>
+        <td>
+          <pre><code class="cpp" data-trim data-noescape>
 <mark>[[visible]]</mark> bool grph_is_tree(const graph&amp; g);
-    </code></pre>
+          </code></pre>
+        </td>
+      </tr>
+    </table>
     <p>Компиляция:<br>
       <span style="font-size: 36px;"><tt>g++ -shared -fvisibility=hidden &hellip;</tt></span></p>
+  </section>
+
+  <!-- Мои предложения -->
+  <section>
+    <h2>Мои предложения по улучшению C++</h2>
   </section>
 
   <!-- Intrinsic-функции для микробенчмарков -->
@@ -1298,21 +1448,18 @@ EXPORT bool grph_is_tree(const graph&amp; g);
   <!-- Intrinsic-функции для микробенчмарков - Пример -->
   <section>
     <h3>Пример</h3>
-    <pre><code class="cpp" data-trim style="font-size: 18px;">
+    <pre><code class="cpp" data-trim>
 #include &lt;chrono&gt;
 #include &lt;iostream&gt;
 
 double perform_computation(int);
 
-void benchmark()
-{
-    using namespace std;
-    auto start = chrono::high_resolution_clock::now();
-    double answer = perform_computation(42);
-    auto delta = chrono::high_resolution_clock::now() - start;
-    cout &lt;&lt; "The answer is: " &lt;&lt; answer &lt;&lt; ". The computation took "
-         &lt;&lt; chrono::duration_cast&lt;chrono::milliseconds&gt;(delta).count()
-         &lt;&lt; " ms";
+void benchmark() {
+  using namespace std;
+  auto start = chrono::high_resolution_clock::now();
+  double answer = perform_computation(42);
+  auto delta = chrono::high_resolution_clock::now() - start;
+  cout &lt;&lt; "The computation took " &lt;&lt; delta.count() &lt;&lt; " ns";
 }
     </code></pre>
   </section>
@@ -1329,32 +1476,24 @@ void benchmark()
   <!-- Исправленный пример -->
   <section>
     <h3>Исправленный пример</h3>
-    <pre><code class="cpp" data-trim style="font-size: 18px;" data-noescape>
+    <pre><code class="cpp" data-trim data-noescape>
 #include &lt;chrono&gt;
 #include &lt;iostream&gt;
 #include &lt;benchmark&gt;
 
 double perform_computation(int);
 
-void benchmark()
-{
-    using namespace std;
-    auto start = chrono::high_resolution_clock::now();
-    int value = 42;
-    <mark>experimental::benchmark::touch(value);</mark>
-    double answer = perform_computation(value);
-    <mark>experimental::benchmark::keep(answer);</mark>
-    auto delta = chrono::high_resolution_clock::now() - start;
-    cout &lt;&lt; "The answer is: " &lt;&lt; answer &lt;&lt; ". The computation took "
-         &lt;&lt; chrono::duration_cast&lt;chrono::milliseconds&gt;(delta).count()
-         &lt;&lt; " ms";
+void benchmark() {
+  using namespace std;
+  auto start = chrono::high_resolution_clock::now();
+  int value = 42;
+  <mark>experimental::benchmark::touch(value);</mark>
+  double answer = perform_computation(value);
+  <mark>experimental::benchmark::keep(answer);</mark>
+  auto delta = chrono::high_resolution_clock::now() - start;
+  cout &lt;&lt; "The computation took "  &lt;&lt; delta.count() &lt;&lt; " ns";
 }
     </code></pre>
-  </section>
-
-  <!-- Мои предложения в стандартную библиотеку -->
-  <section>
-    <h2>Мои предложения в стандартную библиотеку</h2>
   </section>
 
   <!-- String Prefix and Suffix Checking -->
@@ -1377,18 +1516,24 @@ void benchmark()
   <section>
     <p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0458r0.html"
       class="paper">P0458R0</a> Checking for Existence of an Element in Associative Containers</p>
-    <p>Было:</p>
-    <pre><code class="cpp" data-trim>
+    <table class="compare-code">
+      <tr>
+        <td>Было:</td>
+        <td><pre><code class="cpp" data-trim>
 if (some_set.find(element) != some_set.end()) {
-// ...
+  // ...
 }
-    </code></pre>
-    <p>Стало:</p>
-    <pre><code class="cpp" data-trim data-noescape>
+        </code></pre></td>
+      </tr>
+      <tr>
+        <td>Стало:</td>
+        <td><pre><code class="cpp" data-trim data-noescape>
 if (some_set.<mark>contains(element)</mark>) {
-// ...
+  // ...
 }
-    </code></pre>
+        </code></pre></td>
+      </tr>
+    </table>
   </section>
 
   <!-- Планы на будущее -->
@@ -1403,20 +1548,24 @@ uint32_t errc;
 string_view msg;
 
 // C-style
-printf("Error 0x%08x: '%.*s'\n", errc, (int)msg.size(), msg.data());
+printf(&quot;Error 0x%08x: &apos;%.*s&apos;\n&quot;, errc,
+       (int)msg.size(), msg.data());
 
 // iostream
-cout << "Error 0x" << setw(8) << setfill('0') << ios::hex << errc
-     << ": '" << msg << "'\n";
+cout &lt;&lt; &quot;Error 0x&quot; &lt;&lt; setw(8) &lt;&lt; setfill(&apos;0&apos;) &lt;&lt; ios::hex &lt;&lt; errc
+     &lt;&lt; &quot;: &apos;&quot; &lt;&lt; msg &lt;&lt; &quot;&apos;\n&quot;;
 
 // fmtlib
-fmt::print("Error 0x{:08x}: '{}'\n", errc, msg);
+fmt::print(&quot;Error 0x{:08x}: &apos;{}&apos;\n&quot;, errc, msg);
     </code></pre>
   </section>
 
   <!-- Спасибо за внимание! -->
   <section>
     <h1>Спасибо за внимание!</h1>
+    <div class="link-bitly"><a href="https://bit.ly/2jIjxTU">
+      <i class="fa fa-external-link"></i> bit.ly/2jIjxTU</a>
+    </div>
   </section>
 
 </div></div>
