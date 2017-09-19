@@ -18,24 +18,50 @@ layout: default
 
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
-  <h2>Proposals for the Issaquah meeting</h2>
-  <ul>
-    <li>
-      <a href="/cxx/P0412R0 Benchmarking Primitives.html">
-        P0412R0 Benchmarking Primitives</a><br>
-      <a href="/cxx/slides/benchmarking.html">Slides</a>
-    </li>
-    <li>
-      <a href="/cxx/P0457R0 String Prefix and Suffix Checking.html">
-        P0457R0 String Prefix and Suffix Checking</a><br>
-      <a href="/cxx/slides/starts_with.html">Slides</a>
-    </li>
-    <li>
-      <a href="/cxx/P0458R0 Checking for Existence of an Element in Associative Containers.html">
-        P0458R0 Checking for Existence of an Element in Associative Containers</a><br>
-      <a href="/cxx/slides/contains.html">Slides</a>
-    </li>
-  </ul>
+  <h2>C++ language enhancement proposals</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Document</th>
+        <th>Title</th>
+        <th>ISO C++ Bugzilla</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="/cxx/P0412R0 Benchmarking Primitives.html">P0412R0</a></td>
+        <td>Benchmarking Primitives</td>
+        <td></td>
+        <td>Reviewed by EWG in Issaquah-2016
+          (<a href="/cxx/slides/starts_with.html">Slides</a>), some corrections
+          needed</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="/cxx/P0457R0 String Prefix and Suffix Checking.html">P0457R0</a><br>
+          <a href="/cxx/p0457r1.html">P0457R1</a>
+        </td>
+        <td>String Prefix and Suffix Checking</td>
+        <td><a href="https://issues.isocpp.org/show_bug.cgi?id=244">244</a></td>
+        <td>Reviewed by incomplete LEWG in Issaquah-2016<br>
+            Reviewed by LEWG in Toronto-2017, ready for LWG review with minor
+            corrections (done in P0457R1)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <a href="/cxx/P0458R0 Checking for Existence of an Element in Associative Containers.html">P0458R0</a>
+        </td>
+        <td>
+          P0458R0 Checking for Existence of an Element in Associative Containers
+        </td>
+        <td><a href="https://issues.isocpp.org/show_bug.cgi?id=245">245</a></td>
+        <td>Reviewed by LEWG subgroup in Toronto-2016
+          (<a href="/cxx/slides/contains.html">Slides</a>). Awaiting LEWG review</td>
+      </tr>
+    </tbody>
+  </table>
 
   <h2>Miscellaneous</h2>
   <ul>
