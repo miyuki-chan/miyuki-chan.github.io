@@ -128,8 +128,8 @@
   <section>
     <h1>Внутреннее устройство и оптимизации компилятора GCC</h1>
     <div class="center-wrapper"><b>Михаил Мальцев</b></div>
-    <div class="link-bitly"><a href="https://bit.ly/???">
-      <i class="fa fa-external-link"></i> bit.ly/???</a>
+    <div class="link-bitly"><a href="https://bit.ly/gcc_">
+      <i class="fa fa-external-link"></i> bit.ly/gcc_</a>
     </div>
   </section>
 
@@ -240,6 +240,7 @@
     <div class="center-wrapper">
       <img src="images/retargetability.svg" height="500px;">
     </div>
+    <span class="todo">доделать картинку</span>
   </section>
 
   <section>
@@ -773,7 +774,7 @@ int encode_image_simple(quality q,
         </code></pre>
       </div>
       <div style="height: 550px; float: left; width: 30%;">
-        <img src="images/vrp1.png">
+        <img src="images/cfg-vrp1.png">
       </div>
     </div>
   </section>
@@ -803,7 +804,7 @@ int encode_image_simple(quality q,
         </code></pre>
       </div>
       <div style="height: 550px; float: left; width: 30%;">
-        <img src="images/vrp2.png">
+        <img src="images/cfg-vrp2.png">
       </div>
     </div>
   </section>
@@ -1190,13 +1191,13 @@ void udivmodqi4(uint8_t dividend, uint8_t divisor,
 
   <section>
     <pre style="font-size:15px;">
-(define_expand "divmodqi4"
+(define_expand "udivmodqi4"
   [(parallel [(set (match_operand:QI 0 "register_operand")
-                   (div:QI
+                   (udiv:QI
                      (match_operand:QI 1 "register_operand")
                      (match_operand:QI 2 "nonimmediate_operand")))
               (set (match_operand:QI 3 "register_operand")
-                   (mod:QI (match_dup 1) (match_dup 2)))
+                   (umod:QI (match_dup 1) (match_dup 2)))
               (clobber (reg:CC FLAGS_REG))])]
   "TARGET_QIMODE_MATH"
 {
@@ -1207,21 +1208,21 @@ void udivmodqi4(uint8_t dividend, uint8_t divisor,
   tmp1 = gen_reg_rtx (HImode);
 
   /* Extend operands[1] to HImode.  Generate 8bit divide.  Result is in AX.  */
-  emit_insn (gen_extendqihi2 (tmp1, operands[1]));
-  emit_insn (gen_divmodhiqi3 (tmp0, tmp1, operands[2]));
+  emit_insn (gen_zero_extendqihi2 (tmp1, operands[1]));
+  emit_insn (gen_udivmodhiqi3 (tmp0, tmp1, operands[2]));
 
   /* Extract remainder from AH.  */
   tmp1 = gen_rtx_ZERO_EXTRACT (SImode, tmp0, GEN_INT (8), GEN_INT (8));
   tmp1 = lowpart_subreg (QImode, tmp1, SImode);
   rtx_insn *insn = emit_move_insn (operands[3], tmp1);
 
-  mod = gen_rtx_MOD (QImode, operands[1], operands[2]);
+  mod = gen_rtx_UMOD (QImode, operands[1], operands[2]);
   set_unique_reg_note (insn, REG_EQUAL, mod);
 
   /* Extract quotient from AL.  */
   insn = emit_move_insn (operands[0], gen_lowpart (QImode, tmp0));
 
-  div = gen_rtx_DIV (QImode, operands[1], operands[2]);
+  div = gen_rtx_UDIV (QImode, operands[1], operands[2]);
   set_unique_reg_note (insn, REG_EQUAL, div);
 
   DONE;
