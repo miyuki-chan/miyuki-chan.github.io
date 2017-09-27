@@ -1,0 +1,30 @@
+/* semi-fade-out */
+.reveal .slides section .fragment.semi-fade-out-current {
+  opacity: 1;
+  visibility: inherit;
+}
+
+.reveal .slides section .fragment.semi-fade-out-current.current-fragment {
+  opacity: 0.3;
+  visibility: inherit;
+}
+
+.reveal .slides section .fragment.semi-fade-out.visible {
+  opacity: 0.3;
+  visibility: inherit;
+}
+
+/* mark */
+.reveal .slides section .fragment.mark-current {
+  background-color: inherit;
+  visibility: inherit;
+  opacity: 1;
+}
+
+.reveal .slides section .fragment.mark-current.current-fragment {
+  background-color: yellow;
+}
+
+.reveal .slides section .fragment.mark.visible {
+  background-color: yellow;
+}

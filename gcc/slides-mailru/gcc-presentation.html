@@ -86,21 +86,6 @@
       padding-right: 10px;
     }
 
-    .reveal .slides section .fragment.semi-fade-out-current {
-      opacity: 1;
-      visibility: inherit;
-    }
-
-    .reveal .slides section .fragment.semi-fade-out-current.current-fragment {
-      opacity: 0.3;
-      visibility: inherit;
-    }
-
-    .reveal .slides section .fragment.semi-fade-out.visible {
-      opacity: 0.3;
-      visibility: inherit;
-    }
-
     /* Title and last slide - short link to this presentation */
     .reveal .slides div.link-bitly {
       padding-top: 36px;
@@ -118,6 +103,7 @@
       background-color: #f8f8f8;
     }
   </style>
+  <link rel="stylesheet" href="css/fragments.css">
   <link rel="stylesheet" href="css/tree-list.css">
 </head>
 <body>
@@ -208,7 +194,7 @@
       <li>Выполнить компиляцию, вывести список исполненных команд:<br>
         <div class="cmdline"><i class="fa fa-terminal"></i> gcc -v main.c other.c &hellip;</div>
       </li>
-      <li>Ввести список команд, не исполняя их (dry run):<br>
+      <li>Вывести список команд, не исполняя их (dry run):<br>
         <div class="cmdline"><i class="fa fa-terminal"></i> gcc -### main.c other.c &hellip;</div>
       </li>
     </ul>
@@ -236,11 +222,10 @@
   </section>
 
   <section>
-    <h3>Перенастраиваемость: требование, формирующее архитектуру</h3>
+    <h3>Перенастраиваемость</h3>
     <div class="center-wrapper">
-      <img src="images/retargetability.svg" height="500px;">
+      <img src="images/retargetability.svg" height="550px;">
     </div>
-    <span class="todo">доделать картинку</span>
   </section>
 
   <section>
@@ -347,6 +332,19 @@ first_is_gt(hh_mm a, hh_mm b) {
   </section>
 
   <section>
+    <h3>Трансляция</h3>
+    <p>Если в программе не выявлено ошибок, начинается процесс её перевода в промежуточное
+      представление, которое:<br>
+      <ul>
+        <li>(почти) не зависит от исходного языка и целевой архитектуры</li>
+        <li>удобно для работы оптимизатора</li>
+        <li>позволяет выразить типичные инструкции, доступные современным процессорам</li>
+      </ul>
+    </p>
+
+  </section>
+
+  <section>
     <h3>Упрощение конструкций языка</h3>
     <p>На примере языка C++:</p>
     <ul>
@@ -354,7 +352,6 @@ first_is_gt(hh_mm a, hh_mm b) {
       <li>Шаблоны</li>
       <li>Лямбда-выражения и замыкания</li>
       <li>Ranged-based циклы</li>
-      <li>Инициализация локальных статических переменных</li>
     </ul>
     <aside class="notes">
       Упомянуть, что это называется синтаксическим сахаром
@@ -412,7 +409,7 @@ int <mark>_ZN8my_class7get_sumEv</mark>(struct my_class *this) {
       <img src="images/meme_go_deeper.jpg" width="80%">
     </div>
     <aside class="notes">
-      Мы избавились далеко не от всех абстракций
+      Мы избавились далеко не ото всех абстракций
     </aside>
   </section>
 
@@ -622,7 +619,7 @@ bb_3:
     <h3>Понятие оптимизации</h3>
     <p>Оптимизация, выполняемая компилятором &mdash; улучшение (в отличие от
       понятия оптимизации в математике).</p>
-    Изначальные источники неоптимальности:
+    Изначальные источники не оптимальности:
     <ul>
       <li>Код, генерируемый макросами или другими программами</li>
       <li>Выбор, сделанный в пользу читаемости, лёгкости поддержки и скорости разработки</li>
@@ -645,7 +642,7 @@ bb_3:
     <ul>
       <li>Поиск инвариантов и упрощение кода на их основе</li>
       <li>Удаление избыточных операций</li>
-      <li>Перемещение кода для избежания избыточных вычислений</li>
+      <li>Перемещение кода для избегания избыточных вычислений</li>
       <li>Дублирование и специализация кода</li>
       <li>Использование знаний об архитектуре процессора для генерации более оптимального кода</li>
       <li>Эвристики: оптимизация более вероятного случая за счёт пессимизации менее вероятного</li>
@@ -663,7 +660,7 @@ bb_3:
       </ul>
     </p>
     <p>
-      Отдельно можно выделить машинно-зависимые оптимизации.
+      Отдельно можно выделить машинно-зависимые оптимизации, оптимизации циклов и др.
     </p>
   </section>
   <!-- #endregion -->
@@ -680,14 +677,13 @@ bb_3:
           <li><tt>x - x</tt>&emsp;<i class="fa fa-long-arrow-right"></i>&emsp;<tt>0</tt></li>
         </ul>
       </li>
-      <li>Оптимизации на уровне команд процессора</li>
-      <li>&hellip;</li>
+      <li>Оптимизации последовательностей инструкций процессора по шаблону</li>
     </ul>
   </section>
 
   <section>
     <h3>DSL для описания тождеств</h3>
-    <a href="https://www.youtube.com/watch?v=Tlr_mIZ82-U">
+    Richard Biener <a href="https://www.youtube.com/watch?v=Tlr_mIZ82-U">
       <i class="fa fa-youtube-play"></i>
         Unifying GENERIC and GIMPLE folding with a Pattern Description</a></li>
     <pre style="margin-top:10px;">
@@ -713,10 +709,9 @@ bb_3:
     <ul>
       <li>Распространение констант и копий</li>
       <li>Устранение мёртвого кода</li>
-      <li>Устранение избыточности (полной либо частичной)</li>
+      <li>Устранение избыточных вычислений</li>
       <li>Устранение общих подвыражений</li>
       <li>Перемещение кода</li>
-      <li>Оптимизации циклов</li>
     </ul>
   </section>
 
@@ -810,18 +805,23 @@ int encode_image_simple(quality q,
   </section>
 
   <section>
-    <h3>Оптимизации циклов</h3>
-    <p>Представляют собой несколько проходов конвейера. Примеры:</p>
+    <h3>Оптимизация циклов</h3>
+    <p>Состоит из несколько фаз (проходов). Анализ циклов включает в себя:</p>
     <ul>
-      <li>Перемещение инвариантов (loop invariant motion)</li>
-      <li>Размыкание (unswitching)</li>
-      <li>Опережающее объединение (predictive commoning)</li>
-      <li>Раскрутка (unrolling)</li>
-      <li>Расщепление (distribution)</li>
-      <li>Перестановка (interchange)</li>
+      <li>Нахождение переменной индукции</li>
+      <li>Оценку количества итераций цикла</li>
+      <li>Анализ зависимости данных</li>
     </ul>
-    <p>Целью этих оптимизаций часто служит создание возможности векторизации кода либо улучшение
-      работу с кэш-памятью.</p>
+    <p>Полученные данные позволяют выполнять преобразования циклов, которые:</p>
+    <ul>
+      <li>Устраняют избыточные вычисления</li>
+      <li>Увеличивают эффективность использования кэша</li>
+      <li>Делают возможной векторизацию кода</li>
+    </ul>
+    <aside class="notes">
+      Устраняют избыточные вычисления - LIM и PCOM<br>
+      Увеличивают эффективность использования кэша - ldist
+    </aside>
   </section>
 
   <section>
@@ -916,10 +916,9 @@ void unswitch(char *x, int n,
       <li>(не)использование параметров в функции</li>
       <li>Выравнивание указателей</li>
       <li>Динамические типы объектов</li>
-      <li>Отсутствие побочного действия</li>
     </ul>
     <p>Собранная информация позволяет оптимизировать функцию либо создать
-      несколько версий одной функции, которые можно лучше оптимизировать</p>
+      несколько версий одной функции, которые лучше поддаются оптимизации.</p>
   </section>
 
   <section>
@@ -1061,16 +1060,15 @@ long sum(const std::vector&lt;long&gt;&amp; vec) {
       используют разные алгоритмы.
     </p>
     <ol>
-      <li>Ранний этап граф вызовов обходится в топологическом порядке, учитывается
-        только размер функций.</li>
+      <li>Ранний этап: граф вызовов обходится в топологическом порядке, основной критерий &mdash;
+        размер вызываемой функции.</li>
       <li>Поздний этап: для каждого вызова (ребра в графе) рассчитывается сложная
         метрика, которая моделирует пользу от встраивания вызова.
         Используется очередь с приоритетами.</li>
     </ol>
     <p>
-      <i class="fa fa-fire" style="color:#f47442"></i>
-      <a href="https://lkml.org/lkml/2009/1/9/290">Дискуссия Линуса Торвальдса
-        и мэйнтейнера GCC на тему эвристик</a>
+      <a href="https://lkml.org/lkml/2009/1/9/290"><i class="fa fa-external-link"></i> Жаркая дискуссия Линуса Торвальдса
+        и мэйнтейнера GCC на тему эвристик</a> <i class="fa fa-fire" style="color:#f47442"></i>
     </p>
     <aside class="notes">
       На раннем этапе компилятор пытается уменьшить объём работы для "тяжелой артиллерии" и
@@ -1087,12 +1085,12 @@ long sum(const std::vector&lt;long&gt;&amp; vec) {
   <!-- #region Back end и машинно-зависимые оптимизации -->
   <section>
     <h3>Back end и машинно-зависимые оптимизации</h3>
-    Каждый back end в GCC состоит из двух частей:
+    Каждый back end в GCC включает в себя:
     <ul>
       <li>Код (на языке C++), специфичный для компиляции под конкретную архитектуру</li>
       <li>Описание архитектуры (инструкций, регистров и т.д.) на особом DSL</li>
     </ul>
-    Проход оптимизатора <b>expand</b> преобразует код GIMPLE в машинно-зависимое представление
+    Проход оптимизатора <b>expand</b> преобразует код <b>GIMPLE</b> в машинно-зависимое представление
     <b>RTL</b>.
   </section>
 
@@ -1110,14 +1108,16 @@ uint8_t mod(uint8_t a, uint8_t b) {
       <li><tt>umod</tt></li>
       <li><tt>udivmod</tt></li>
       <li><tt>udiv</tt> и вычислить по формуле <tt>a - (a/b)</tt></li>
+      <li>то же самое, но для типов большей разрядности</li>
+
     </ul></p>
     <p>В итоге (на x86) удастся найти шаблон <tt>udivmod</tt> для <tt>uint8_t</tt></p>
   </section>
 
   <section>
-    <h3>Небольшая несостыковка</h3>
+    <h3>Выбранный шаблон и реальная инструкция</h3>
     <pre><code class="cpp" data-trim data-noescape>
-// Что нужно компилятору (нужен один из стандартных шаблонов)
+// Псевдокод шаблона udivmod
 void udivmodqi4(uint8_t dividend, uint8_t divisor,
                 uint8_t *remainder, uint8_t* quotient)
 {
@@ -1125,18 +1125,47 @@ void udivmodqi4(uint8_t dividend, uint8_t divisor,
   *remainder = dividend % divisor;
 }
 
-// Реальная инструкция процессора делает не совсем то, что нам нужно
-void udivmodhiqi3(int16_t dividend, uint8_t divisor, uint16_t *result)
+// Но в x86 инструкция деления работает несколько иначе.
+// Псевдокод шаблона инструкции div для 8-битного делителя
+// (с некоторыми допущениями):
+void udivmodhiqi3(uint16_t dividend, uint8_t divisor, uint16_t *result)
 {
-  uint16_t remainder = (uint8_t)(dividend / (uint16_t)divisor);
-  uint16_t quotient = (uint8_t)(dividend % (uint16_t)divisor);
+  uint16_t quotient = (uint8_t)(dividend / (uint16_t)divisor);
+  uint16_t remainder = (uint8_t)(dividend % (uint16_t)divisor);
   *result = (remainder << 8) | quotient;
 }
     </code></pre>
   </section>
 
   <section>
-    <h3>Описание реальной инструкции деления</h3>
+    <h3></h3>
+    <pre><code class="cpp" data-trim data-noescape>
+// Реальная инструкция процессора делает не совсем то, что нам нужно
+void udivmodhiqi3(uint16_t dividend, uint8_t divisor, uint16_t *result)
+{
+  uint16_t quotient = (uint8_t)(dividend / (uint16_t)divisor);
+  uint16_t remainder = (uint8_t)(dividend % (uint16_t)divisor);
+  *result = (remainder << 8) | quotient;
+}
+
+// Напишем адаптер
+void udivmodqi4(uint8_t dividend, uint8_t divisor,
+                uint8_t *remainder, uint8_t* quotient)
+{
+  union {
+    uint16_t u16;
+    struct { uint8_t low; uint8_t high; };
+  } result;
+
+  udivmodhiqi3((uint16_t)dividend, divisor, &result.u16);
+  *remainder = result.high;
+  *quotient = result.low;
+}
+    </code></pre>
+  </section>
+
+  <section>
+    <h3>Описание инструкции деления в компиляторе</h3>
     <pre style="font-size:20px;">
 ;; Операнд 0 - результат <span class="fragment highlight-current-red" data-fragment-index="3">((remainder << 8) | quotient)</span>
 ;; Операнд 1 - делимое
@@ -1160,77 +1189,11 @@ void udivmodhiqi3(int16_t dividend, uint8_t divisor, uint16_t *result)
   "div{b}\t%2"
   [(set_attr "type" "idiv")
    (set_attr "mode" "QI")])</pre>
-  </section>
-
-  <section>
-    <h3>Решение несостыковки</h3>
-    <pre><code class="cpp" data-trim data-noescape>
-// Реальная инструкция процессора делает не совсем то, что нам нужно
-void udivmodhiqi3(uint16_t dividend, uint8_t divisor, uint16_t *result)
-{
-  uint16_t remainder = (uint8_t)(dividend / (uint16_t)divisor);
-  uint16_t quotient = (uint8_t)(dividend % (uint16_t)divisor);
-  *result = (remainder << 8) | quotient;
-}
-
-// Напишем адаптер
-void udivmodqi4(uint8_t dividend, uint8_t divisor,
-                uint8_t *remainder, uint8_t* quotient)
-{
-  union {
-    uint16_t u16;
-    struct { uint8_t low; uint8_t high; };
-  } result;
-
-  udivmodhiqi3((uint16_t)dividend, divisor, &result.u16);
-  *remainder = result.high;
-  *quotient = result.low;
-}
-    </code></pre>
-  </section>
-
-  <section>
-    <pre style="font-size:15px;">
-(define_expand "udivmodqi4"
-  [(parallel [(set (match_operand:QI 0 "register_operand")
-                   (udiv:QI
-                     (match_operand:QI 1 "register_operand")
-                     (match_operand:QI 2 "nonimmediate_operand")))
-              (set (match_operand:QI 3 "register_operand")
-                   (umod:QI (match_dup 1) (match_dup 2)))
-              (clobber (reg:CC FLAGS_REG))])]
-  "TARGET_QIMODE_MATH"
-{
-  rtx div, mod;
-  rtx tmp0, tmp1;
-
-  tmp0 = gen_reg_rtx (HImode);
-  tmp1 = gen_reg_rtx (HImode);
-
-  /* Extend operands[1] to HImode.  Generate 8bit divide.  Result is in AX.  */
-  emit_insn (gen_zero_extendqihi2 (tmp1, operands[1]));
-  emit_insn (gen_udivmodhiqi3 (tmp0, tmp1, operands[2]));
-
-  /* Extract remainder from AH.  */
-  tmp1 = gen_rtx_ZERO_EXTRACT (SImode, tmp0, GEN_INT (8), GEN_INT (8));
-  tmp1 = lowpart_subreg (QImode, tmp1, SImode);
-  rtx_insn *insn = emit_move_insn (operands[3], tmp1);
-
-  mod = gen_rtx_UMOD (QImode, operands[1], operands[2]);
-  set_unique_reg_note (insn, REG_EQUAL, mod);
-
-  /* Extract quotient from AL.  */
-  insn = emit_move_insn (operands[0], gen_lowpart (QImode, tmp0));
-
-  div = gen_rtx_UDIV (QImode, operands[1], operands[2]);
-  set_unique_reg_note (insn, REG_EQUAL, div);
-
-  DONE;
-})</pre>
-  </section>
+</section>
 
   <section>
     <div class="center-wrapper" style="height:500px;">
+      <h3>И так для каждой инструкции...</h3>
       <img src="images/horror.jpg">
     </div>
   </section>
@@ -1238,15 +1201,14 @@ void udivmodqi4(uint8_t dividend, uint8_t divisor,
   <section>
     <h3>Примеры машинно-зависимых оптимизаций</h3>
     <ul>
-      <li>Упорядочивание базовых блоков</li>
+      <li>Переупорядочение базовых блоков</li>
       <li>Выделение регистров</li>
-      <li>Программная конвейеризация</li>
-      <li>peephole-оптимизации</li>
+      <li>Планирование инструкций</li>
     </ul>
   </section>
 
   <section>
-    <h3>Упорядочивание базовых блоков</h3>
+    <h3>Переупорядочение базовых блоков</h3>
       <div style="float: left; width: 70%;">
         <pre><code class="cpp" data-trim data-noescape>
 #define likely(x)    __builtin_expect((x),1)
@@ -1263,7 +1225,7 @@ int foo(int x) {
 foo: ; edi = x
     sub     rsp, 8
     test    edi, edi
-    jns     .L2
+    <span class="fragment mark-current" data-fragment-index="2">jns     .L2</span>
     <span class="fragment semi-fade-out-current" data-fragment-index="2">call    bar</span>
 .L3:
     add     eax, 5
@@ -1271,7 +1233,7 @@ foo: ; edi = x
     ret
 <span class="fragment semi-fade-out-current" data-fragment-index="1">.L2:
     call    baz
-    jmp     .L3</span>
+    <span class="fragment mark-current" data-fragment-index="2">jmp     .L3</span></span>
       </code></pre>
     </div>
     <img src="images/cfg-bbro1.svg" style="height:550px;">
@@ -1324,8 +1286,9 @@ foo: ; edi = x
       </li>
     </ul>
     <p>
-      <i class="fa fa-file-text-o"></i> Agner Fog.
-      <a href="http://www.agner.org/optimize/optimizing_cpp.pdf"> Optimizing software in C++</a>
+      <i class="fa fa-file-text-o"></i> Agner Fog
+      <a href="http://www.agner.org/optimize/optimizing_cpp.pdf"><i class="fa fa-external-link"></i>
+        Optimizing software in C++</a>
     </p>
   </section>
 <!-- #endregion -->
@@ -1336,30 +1299,32 @@ foo: ; edi = x
   </section>
 
   <section>
-    <h3>Основные корпоративные разработчики GCC</h3>
-    <ul>
-      <li>Компании, разрабатывающие оптимизатор, отвечающие за общую архитектуру и язык C++:
-        <ul>
-          <li>Red Hat</li>
-          <li>Suse</li>
-        </ul>
-      </li>
-      <li>Компании, сопровождающие front end своего языка:
-        <ul>
-          <li>Google (golang)</li>
-          <li>Adacore (Ada)</li>
-        </ul>
-      </li>
-      <li>Компании, сопровождающие back end своего процессора:
-        <ul>
-          <li>Intel</li>
-          <li>ARM</li>
-          <li>Linaro (ARM, AArch64)</li>
-          <li>Imagination technologies (MIPS)</li>
-          <li>IBM (Power)</li>
-        </ul>
-      </li>
-    </ul>
+    <h3>Корпоративные разработчики GCC</h3>
+    <div style="float:left; width:70%">
+      Компании Red Hat и SUSE активно работают над ключевыми компонентами GCC:
+      <ul>
+        <li>Front end языка C++ и его стандартная библиотека</li>
+        <li>Предупреждения компилятора (C, C++)</li>
+        <li>Генерация отладочной информации</li>
+        <li>Оптимизации</li>
+      </ul>
+    </div>
+    <div style="float:left; width:30%;">
+      <img src="images/logo-redhat.png">
+      <img src="images/logo-suse.png" style="width:200px;">
+    </div>
+  </section>
+
+  <section>
+    <h3>Корпоративные разработчики GCC</h3>
+    <p>Поддержкой back-end компонентов обычно занимаются разработчики железа:<p>
+    <div class="center-wrapper" style="height:200px;">
+      <img src="images/logos-hardware.png">
+    </div>
+    <p>Языки Go и Ada также поддерживаются крупными компаниями:</p>
+    <div class="center-wrapper" style="height:100px;">
+      <img src="images/logos-langs.png">
+    </div>
   </section>
 
   <section>
@@ -1431,7 +1396,7 @@ foo: ; edi = x
       <li>Как SSA уживается с указателями (анализ псевдонимов)</li>
       <li>Роль неопределённого поведения в оптимизации</li>
       <li>Математические основы: доминаторы в графах, решётки сбора</li>
-      <li>Машинно-зависивые оптимизации: распределение регистров, программная конвейеризация</li>
+      <li>Машинно-зависимые оптимизации: распределение регистров, планирование инструкций</li>
       <li>Модель памяти, атомарные операции, многопоточность</li>
       <li>Оптимизация времени компоновки (LTO)</li>
       <li>Работа sanitizer-ов и анализа покрытия</li>
@@ -1480,23 +1445,23 @@ foo: ; edi = x
   <section>
     <h3>Новые фичи GCC, над которыми ведётся работа</h3>
     <ul>
-      <li><a href="https://gcc.gnu.org/wiki/cxx-modules">Модули C++</a></li>
-      <li><a href="https://gcc.gnu.org/ml/gcc-patches/2017-05/msg02108.html">Поддержка языка D</a></li>
+      <li><a href="https://gcc.gnu.org/wiki/cxx-modules"><i class="fa fa-external-link"></i> Модули C++</a></li>
+      <li><a href="https://gcc.gnu.org/ml/gcc-patches/2017-05/msg02108.html"><i class="fa fa-external-link"></i> Поддержка языка D</a></li>
       <li><a href="https://developers.redhat.com/blog/2017/07/11/statement-frontier-notes-and-location-views/#more-437095">
-        Больше отладочной информации</a> для оптимизированных программ</li>
-      <li><a href="https://gcc.gnu.org/ml/gcc-patches/2017-07/msg00556.html">Противодействие</a> атакам
-        <a href="https://access.redhat.com/security/vulnerabilities/stackguard">Stack Clash</a></li>
+        <i class="fa fa-external-link"></i> Больше отладочной информации</a> для оптимизированных программ</li>
+      <li><a href="https://gcc.gnu.org/ml/gcc-patches/2017-07/msg00556.html"><i class="fa fa-external-link"></i> Противодействие</a> атакам
+        <a href="https://access.redhat.com/security/vulnerabilities/stackguard"><i class="fa fa-external-link"></i> Stack Clash</a></li>
       <li>Более понятные сообщения об ошибках и больше fix-it подсказок
         <ul>
           <li><a href="https://gcc.gnu.org/ml/gcc-patches/2017-05/msg00353.html">
-            &laquo;diff&raquo; для не совпадающих шаблонных типов
+            <i class="fa fa-external-link"></i> &laquo;diff&raquo; для не совпадающих шаблонных типов
           </a></li>
         </ul>
       </li>
       <li>Более качественная оптимизация конструкции switch</li>
       <li>Улучшения оптимизаций циклов и векторизации</li>
       </li>
-      <li><a href="https://gcc.gnu.org/ml/gcc-patches/2017-07/msg01448.html">Language Server</a>
+      <li><a href="https://gcc.gnu.org/ml/gcc-patches/2017-07/msg01448.html"><i class="fa fa-external-link"></i> Language Server</a>
         (возможно когда-нибудь)</li>
       <li>Поддержка новых возможностей процессоров Intel (CET) и ARM (SVE)</li>
     </ul>
@@ -1505,6 +1470,9 @@ foo: ; edi = x
   <!-- Спасибо за внимание! -->
   <section>
     <h1>Спасибо за внимание!</h1>
+    <div class="link-bitly"><a href="https://bit.ly/gcc_">
+      <i class="fa fa-external-link"></i> bit.ly/gcc_</a>
+    </div>
   </section>
 <!-- #endregion -->
 
