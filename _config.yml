@@ -14,6 +14,9 @@ github_username:  miyuki
 exclude:
     - temp
 
+plugins:
+    - jekyll-sitemap
+
 # Build settings
 markdown: kramdown
 theme: minima
