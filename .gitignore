@@ -2,3 +2,4 @@
 /temp
 .sass-cache
 .jekyll-metadata
+/serve.sh
