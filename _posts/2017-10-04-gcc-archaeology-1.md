@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title: 'Bootstrapping a 29-year-old compiler on a modern system'
+title: 'Building and using a 29-year-old compiler on a modern system'
 tags:
   - compilers
   - GCC
