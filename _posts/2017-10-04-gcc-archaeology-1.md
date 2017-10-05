@@ -14,7 +14,7 @@ on a modern system.
 ## The environment
 
 For my experiments I used an LXC container based on Debian 8 (Why not 9?
-Because I had started working on this post before Debian 8 was released). I
+Because I had started working on this post before Debian 9 was released). I
 decided to use an i386 container (not an amd64 one to save the efforts; I'm
 sure that everything would work out for amd64 too after some dances with
 paths and symlinks).
@@ -41,11 +41,14 @@ Unlike modern versions, GCC 1.27 does not include any huge configury scripts
 and configuration is done manually. Nevertheless, it is very straightforward and
 well documented. In fact, it involves creating just 4 symlinks.
 
-It is amazing, how well backward compatibility is maintained in GCC. It
-is possible to compile GCC 1.27 using a modern compiler after patching only
-a dozen (out of ~92000) lines of code. Most of them are related to changes
-in the C library, and some are due to more strict C syntax rules implemented in
-modern C compilers (see [gcc-1.27.patch](https://gist.github.com/miyuki/9eab2c6a43e23c95183eb39e1f5e6833)).
+It is amazing, how well the C Standard compatibility is maintained in the
+GNU toolchain. Furthermore, essential Glibc headers are also
+backwards compatible with old compilers. Owing to this fact it is possible
+to compile GCC 1.27 using a modern compiler after patching only a dozen
+(out of ~92000) lines of code. Most of them are related to changes in the
+C library, and some are due to more strict C syntax rules implemented in
+modern C compilers
+(see [gcc-1.27.patch](https://gist.github.com/miyuki/9eab2c6a43e23c95183eb39e1f5e6833)).
 
 Another problem was a missing header called `syms.h`, which apparently defines
 some constants used for generating debug information in the SDB format. It
@@ -59,7 +62,7 @@ The URL suggests that these files have something to do with the IBM AIX OS.
 Making the source compilable on a modern system is not enough
 to get a working compiler. As you probably know, the GNU toolchain includes
 other tools, such as an assembler and a linker with which the compiler interacts.
-Luckily, the syntax of generated assembly code is fully backwards compatible with
+Luckily, the syntax of generated assembly code is fully compatible with
 a contemporary version of the GNU assembler (except for debug information).
 As for the linker, some tweaks to the so-called linker specs (i.e. command line
 options used by the GCC driver) were needed.
@@ -107,6 +110,7 @@ Moreover, I managed to perform bootstrap comparison, i.e. to build:
 - stage 1 compiler, i.e. GCC 1.27 compiled by the host compiler (GCC 4.9.2)
 - stage 2 compiler, i.e. GCC 1.27 compiled by the stage 1 compiler
 - stage 3 compiler, i.e. GCC 1.27 compiled by the stage 2 compiler
+
 As I expected stage 2 and stage 3 were identical.
 
 ### Playing around
@@ -120,7 +124,7 @@ For example, I used a
 that produces an ASCII image of the Mandelbrot set (unfortunately, I failed to
 find out who the author of this code is).
 
-Here is the code, formatted for better readability.
+Here is the code, formatted for better readability:
 
 {% highlight C %}
 main (n)
