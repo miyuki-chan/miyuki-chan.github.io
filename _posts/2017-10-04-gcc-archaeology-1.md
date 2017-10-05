@@ -23,13 +23,13 @@ Debian 8 ships GCC 4.9.2 as a host compiler, Binutils 2.25 and Glibc 2.19.
 
 ## Obtaining the source code
 
-Old releases of GCC are available from the official FTP server at
-[gcc.gnu.org](ftp://gcc.gnu.org/pub/gcc/old-releases/). The first available
-release is version [0.9](ftp://gcc.gnu.org/pub/gcc/old-releases/gcc-1/gcc-0.9.tar.bz2).
+Old releases of GCC are available from the official server at
+[gcc.gnu.org](https://gcc.gnu.org/pub/gcc/old-releases/). The first available
+release is version [0.9](https://gcc.gnu.org/pub/gcc/old-releases/gcc-1/gcc-0.9.tar.bz2).
 Unfortunately, this release is not very interesting for us, because it does not support
 the i386 architecture (or any compatible one).
 
-Version [1.27](ftp://gcc.gnu.org/pub/gcc/old-releases/gcc-1/gcc-1.27.tar.bz2) of
+Version [1.27](https://gcc.gnu.org/pub/gcc/old-releases/gcc-1/gcc-1.27.tar.bz2) of
 the GNU C Compiler (notice that back then it was called the GNU C Compiler
 rather than the GNU Compiler Collection) is the first available version that
 supports the i386 architecture. It was released on 05.09.1988 (Linux did
