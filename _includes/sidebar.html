@@ -4,12 +4,6 @@
 
 <!-- Toggleable sidebar -->
 <div class="sidebar" id="sidebar">
-{% comment %}
-  <div class="sidebar-item">
-    <p>{{ site.description }}</p>
-  </div>
-{% endcomment %}
-
   <nav class="sidebar-nav">
     <a class="sidebar-nav-item{% if page.title == "Home" %} active{% endif %}" href="/">Home</a>
 
@@ -28,12 +22,11 @@
       {% endif %}
     {% endfor %}
 
-    <a class="sidebar-nav-item" href="{{ site.github.repo }}">GitHub project</a>
-    {% comment %}
-      <span class="sidebar-nav-item">Currently v{{ site.version }}</span>
-    {% endcomment %}
-  </nav>
   {% endcomment %}
+
+    <a class="sidebar-nav-item" href="{{ site.github.repository_url }}">
+      <i class="fa fa-github"></i> View on GitHub</a>
+  </nav>
 
   <div class="sidebar-item">
     <p>
